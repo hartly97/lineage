@@ -1,0 +1,572 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lineage &mdash; lineage 1.0b1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="lineage 1.0b1 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> lineage
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0b1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">lineage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lineage</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>lineage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lineage</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; lineage</span>
+
+<span class="sd">tools for genetic genealogy and the analysis of consumer DNA test results</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (C) 2016 Andrew Riha</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># http://mikegrouchy.com/blog/2012/05/be-pythonic-__init__py.html</span>
+<span class="kn">from</span> <span class="nn">lineage.individual</span> <span class="k">import</span> <span class="n">Individual</span>
+<span class="kn">from</span> <span class="nn">lineage.resources</span> <span class="k">import</span> <span class="n">Resources</span>
+<span class="kn">from</span> <span class="nn">lineage.visualization</span> <span class="k">import</span> <span class="n">plot_chromosomes</span>
+
+
+<div class="viewcode-block" id="Lineage"><a class="viewcode-back" href="../lineage.html#lineage.Lineage">[docs]</a><span class="k">class</span> <span class="nc">Lineage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="n">resources_dir</span><span class="o">=</span><span class="s1">&#39;resources&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="n">Resources</span><span class="p">(</span><span class="n">resources_dir</span><span class="o">=</span><span class="n">resources_dir</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Lineage.find_discordant_snps"><a class="viewcode-back" href="../lineage.html#lineage.Lineage.find_discordant_snps">[docs]</a>    <span class="k">def</span> <span class="nf">find_discordant_snps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual1</span><span class="p">,</span> <span class="n">individual2</span><span class="p">,</span> <span class="n">individual3</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Find discordant SNPs between two or three individuals.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        individual1 : Individual</span>
+<span class="sd">            reference individual (child if `individual2` and `individual3` are parents)</span>
+<span class="sd">        individual2 : Individual</span>
+<span class="sd">            comparison individual</span>
+<span class="sd">        individual3 : Individual</span>
+<span class="sd">            other parent if `individual1` is child and `individual2` is a parent</span>
+<span class="sd">        save_output : bool</span>
+<span class="sd">            specifies whether to save output to a CSV file in the output directory</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            discordant SNPs and associated genetic data</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ..[1] David Pike, &quot;Search for Discordant SNPs in Parent-Child</span>
+<span class="sd">          Raw Data Files,&quot; David Pike&#39;s Utilities,</span>
+<span class="sd">          http://www.math.mun.ca/~dapike/FF23utils/pair-discord.php</span>
+<span class="sd">        ..[2] David Pike, &quot;Search for Discordant SNPs when given data</span>
+<span class="sd">          for child and both parents,&quot; David Pike&#39;s Utilities,</span>
+<span class="sd">          http://www.math.mun.ca/~dapike/FF23utils/trio-discord.php</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">individual1</span><span class="o">.</span><span class="n">snps</span>
+
+        <span class="c1"># remove nulls for reference individual</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()]</span>
+
+        <span class="c1"># add SNPs shared with `individual2`</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">individual2</span><span class="o">.</span><span class="n">snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">],</span> <span class="n">rsuffix</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+
+        <span class="n">genotype1</span> <span class="o">=</span> <span class="s1">&#39;genotype_&#39;</span> <span class="o">+</span> <span class="n">individual1</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span>
+        <span class="n">genotype2</span> <span class="o">=</span> <span class="s1">&#39;genotype_&#39;</span> <span class="o">+</span> <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">individual3</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;genotype&#39;</span><span class="p">:</span> <span class="n">genotype1</span><span class="p">,</span> <span class="s1">&#39;genotype2&#39;</span><span class="p">:</span> <span class="n">genotype2</span><span class="p">})</span>
+
+            <span class="c1"># find discordant SNPs between reference and comparison individuals</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span> <span class="o">&amp;</span>
+                        <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]))</span> <span class="o">|</span>
+                        <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]))]</span>
+            <span class="k">if</span> <span class="n">save_output</span><span class="p">:</span>
+                <span class="n">save_df_as_csv</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span> <span class="s1">&#39;discordant_snps_&#39;</span> <span class="o">+</span>
+                               <span class="n">individual1</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span>
+                               <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># add SNPs shared with `individual3`</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">individual3</span><span class="o">.</span><span class="n">snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">],</span> <span class="n">rsuffix</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">)</span>
+
+            <span class="n">genotype3</span> <span class="o">=</span> <span class="s1">&#39;genotype_&#39;</span> <span class="o">+</span> <span class="n">individual3</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span>
+
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;genotype&#39;</span><span class="p">:</span> <span class="n">genotype1</span><span class="p">,</span> <span class="s1">&#39;genotype2&#39;</span><span class="p">:</span> <span class="n">genotype2</span><span class="p">,</span>
+                                    <span class="s1">&#39;genotype3&#39;</span><span class="p">:</span> <span class="n">genotype3</span><span class="p">})</span>
+
+            <span class="c1"># find discordant SNPs between child and two parents</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span> <span class="o">&amp;</span>
+                         <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]))</span> <span class="o">|</span>
+                         <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span> <span class="o">|</span>
+                        <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype3</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span> <span class="o">&amp;</span>
+                         <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype3</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype3</span><span class="p">]))</span> <span class="o">|</span>
+                         <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype3</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype3</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype3</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype3</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype3</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span> <span class="o">|</span>
+                        <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype3</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype3</span><span class="p">])</span> <span class="o">&amp;</span>
+                         <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]))]</span>
+
+            <span class="k">if</span> <span class="n">save_output</span><span class="p">:</span>
+                <span class="n">save_df_as_csv</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span> <span class="s1">&#39;discordant_snps_&#39;</span> <span class="o">+</span>
+                               <span class="n">individual1</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span>
+                               <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span>
+                               <span class="n">individual3</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="Lineage.find_shared_dna"><a class="viewcode-back" href="../lineage.html#lineage.Lineage.find_shared_dna">[docs]</a>    <span class="k">def</span> <span class="nf">find_shared_dna</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual1</span><span class="p">,</span> <span class="n">individual2</span><span class="p">,</span> <span class="n">build</span><span class="o">=</span><span class="mi">37</span><span class="p">,</span> <span class="n">cM_threshold</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
+                        <span class="n">snp_threshold</span><span class="o">=</span><span class="mi">1100</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Find the shared DNA between two individuals.</span>
+
+<span class="sd">        Computes the genetic distance in centimorgans (cMs) between SNPs using the specified</span>
+<span class="sd">        assembly&#39;s HapMap. Applies thresholds to determine the shared DNA. Plots shared DNA.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        individual1 : Individual</span>
+<span class="sd">        individual2 : Individual</span>
+<span class="sd">        build : {36, 37}</span>
+<span class="sd">            human genome assembly</span>
+<span class="sd">        cM_threshold : float</span>
+<span class="sd">            minimum centimorgans for each shared DNA segment</span>
+<span class="sd">        snp_threshold : int</span>
+<span class="sd">            minimum SNPs for each shared DNA segment</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">individual1</span><span class="o">.</span><span class="n">snps</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">individual2</span><span class="o">.</span><span class="n">snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">],</span> <span class="n">rsuffix</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+
+        <span class="n">genotype1</span> <span class="o">=</span> <span class="s1">&#39;genotype_&#39;</span> <span class="o">+</span> <span class="n">individual1</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span>
+        <span class="n">genotype2</span> <span class="o">=</span> <span class="s1">&#39;genotype_&#39;</span> <span class="o">+</span> <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;genotype&#39;</span><span class="p">:</span> <span class="n">genotype1</span><span class="p">,</span> <span class="s1">&#39;genotype2&#39;</span><span class="p">:</span> <span class="n">genotype2</span><span class="p">})</span>
+
+        <span class="c1"># determine where individuals share an allele on one chromosome</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;one_chrom_match&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span> <span class="o">|</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span> <span class="o">|</span>
+            <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">|</span>
+            <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">|</span>
+            <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">|</span>
+            <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># determine where individuals share alleles on both chromosomes</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;two_chrom_match&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span> <span class="o">|</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span> <span class="o">|</span>
+            <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+             <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+             <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">])</span> <span class="o">|</span>
+              <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span>
+               <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">genotype1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="n">genotype2</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])))),</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">shared_dna</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">if</span> <span class="n">build</span> <span class="o">==</span> <span class="mi">36</span><span class="p">:</span>
+            <span class="n">hapmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">get_hapmap_h36</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hapmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">get_hapmap_h37</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">chrom</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">chrom</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hapmap</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># create a new dataframe from the positions for the current chromosome</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">)][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">])</span>
+
+            <span class="c1"># merge HapMap for this chrom</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hapmap</span><span class="p">[</span><span class="n">chrom</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># sort based on pos</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;pos&#39;</span><span class="p">)</span>
+
+            <span class="c1"># fill cM rates forward and backward</span>
+            <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">)</span>
+            <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;bfill&#39;</span><span class="p">)</span>
+
+            <span class="c1"># get difference between positions</span>
+            <span class="n">pos_diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ediff1d</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">])</span>
+
+            <span class="c1"># compute cMs between each pos based on probablistic recombination rate</span>
+            <span class="c1"># https://www.biostars.org/p/123539/</span>
+            <span class="n">cMs_match_segment</span> <span class="o">=</span> <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">pos_diffs</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="c1"># add back into temp</span>
+            <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;cMs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">cMs_match_segment</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="k">del</span> <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
+
+            <span class="c1"># use null `map` values to find locations of SNPs</span>
+            <span class="n">snp_indices</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">temp</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span><span class="o">.</span><span class="n">index</span>
+
+            <span class="c1"># use SNP indices to determine boundaries over which to sum cMs</span>
+            <span class="n">start_snp_ix</span> <span class="o">=</span> <span class="n">snp_indices</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">end_snp_ix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">snp_indices</span><span class="p">,</span> <span class="n">snp_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">snp_boundaries</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">start_snp_ix</span><span class="p">,</span> <span class="n">end_snp_ix</span><span class="p">]</span>
+
+            <span class="c1"># sum cMs between SNPs to get total cM distance between SNPs</span>
+            <span class="c1"># http://stackoverflow.com/a/7471967</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;cMs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()][</span><span class="n">snp_boundaries</span><span class="p">]</span>
+            <span class="n">cM_from_prev_snp</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># debug</span>
+            <span class="c1"># temp.loc[snp_indices, &#39;cM_from_prev_snp&#39;] = np.r_[0, cM_from_prev_snp][:-1]</span>
+            <span class="c1"># temp.to_csv(&#39;debug.csv&#39;)</span>
+
+            <span class="c1"># add back into df</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">),</span> <span class="s1">&#39;cM_from_prev_snp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">cM_from_prev_snp</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># get consecutive strings of trues</span>
+            <span class="c1"># http://stackoverflow.com/a/17151327</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">)][</span><span class="s1">&#39;one_chrom_match&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+            <span class="n">a_rshifted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">starts</span> <span class="o">=</span> <span class="n">a</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">a_rshifted</span>
+            <span class="n">ends</span> <span class="o">=</span> <span class="o">~</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">a_rshifted</span>
+            <span class="n">a_starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">starts</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">a_starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">a_starts</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a_starts</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">a_ends</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">ends</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">a_ends</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">a_ends</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a_ends</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">a_starts</span><span class="p">,</span> <span class="n">a_ends</span><span class="p">))</span>
+
+            <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">)][</span><span class="s1">&#39;cM_from_prev_snp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()][</span><span class="n">matches</span><span class="p">]</span>
+            <span class="n">cMs_match_segment</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># get matching segments where total cMs is greater than the threshold</span>
+            <span class="n">matches_passed</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cMs_match_segment</span> <span class="o">&gt;</span> <span class="n">cM_threshold</span><span class="p">)]</span>
+
+            <span class="c1"># get indices where a_end boundary is adjacent to a_start, perhaps indicating a</span>
+            <span class="c1"># discrepant SNP</span>
+            <span class="n">adjacent_ix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">matches_passed</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">matches_passed</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># TODO: check when first one_chrom_match value is false</span>
+
+            <span class="c1"># if there are adjacent segments</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">adjacent_ix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">matches_stitched</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+                <span class="n">prev</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="c1"># stitch together adjacent segments</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">matches_passed</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">prev</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">matches_stitched</span><span class="p">[</span><span class="n">counter</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">matches_stitched</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">matches_stitched</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+                        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="n">prev</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+                <span class="n">matches_passed</span> <span class="o">=</span> <span class="n">matches_stitched</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="n">snp_counts</span> <span class="o">=</span> <span class="n">matches_passed</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">matches_passed</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># apply SNP count threshold for each matching segment; we now have the shared DNA</span>
+            <span class="c1"># segments that pass the centimorgan and SNP thresholds</span>
+            <span class="n">matches_passed</span> <span class="o">=</span> <span class="n">matches_passed</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">snp_counts</span> <span class="o">&gt;</span> <span class="n">snp_threshold</span><span class="p">)]</span>
+
+            <span class="c1"># compute total cMs for each match segment</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">)][</span><span class="s1">&#39;cM_from_prev_snp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()][</span><span class="n">matches_passed</span><span class="p">]</span>
+            <span class="n">cMs_match_segment</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># save matches for this chromosome</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">matches_passed</span><span class="p">:</span>
+                <span class="n">shared_dna</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;chrom&quot;</span><span class="p">:</span> <span class="n">chrom</span><span class="p">,</span>
+                                   <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">)]</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
+                                   <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">)]</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
+                                   <span class="s2">&quot;cMs&quot;</span><span class="p">:</span> <span class="n">cMs_match_segment</span><span class="p">[</span><span class="n">counter</span><span class="p">],</span>
+                                   <span class="s2">&quot;snps&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                   <span class="s2">&quot;gie_stain&quot;</span><span class="p">:</span> <span class="s2">&quot;match&quot;</span><span class="p">})</span>
+                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">build</span> <span class="o">==</span> <span class="mi">36</span><span class="p">:</span>
+            <span class="n">cytobands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">get_cytoband_h36</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cytobands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">get_cytoband_h37</span><span class="p">()</span>
+
+        <span class="c1"># plot data</span>
+        <span class="k">if</span> <span class="n">dir_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">):</span>
+            <span class="n">plot_chromosomes</span><span class="p">(</span><span class="n">shared_dna</span><span class="p">,</span> <span class="n">cytobands</span><span class="p">,</span>
+                             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span>
+                                          <span class="n">individual1</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span>
+                                          <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;_shared_dna.png&#39;</span><span class="p">),</span>
+                             <span class="n">individual1</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; / &#39;</span> <span class="o">+</span> <span class="n">individual2</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; shared DNA&#39;</span><span class="p">,</span> <span class="n">build</span><span class="p">)</span>
+
+        <span class="c1"># print results in CSV format</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;chrom,start,stop,cMs,snps&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">shared_segment</span> <span class="ow">in</span> <span class="n">shared_dna</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">shared_segment</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">shared_segment</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span>
+                  <span class="nb">str</span><span class="p">(</span><span class="n">shared_segment</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">shared_segment</span><span class="p">[</span><span class="s2">&quot;cMs&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span>
+                  <span class="nb">str</span><span class="p">(</span><span class="n">shared_segment</span><span class="p">[</span><span class="s2">&quot;snps&quot;</span><span class="p">]))</span></div></div>
+
+
+<div class="viewcode-block" id="dir_exists"><a class="viewcode-back" href="../lineage.html#lineage.dir_exists">[docs]</a><span class="k">def</span> <span class="nf">dir_exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="c1"># https://stackoverflow.com/a/5032238</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="save_df_as_csv"><a class="viewcode-back" href="../lineage.html#lineage.save_df_as_csv">[docs]</a><span class="k">def</span> <span class="nf">save_df_as_csv</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">dir_exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving &#39;</span> <span class="o">+</span> <span class="n">destination</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="n">na_rep</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Andrew Riha.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0b1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

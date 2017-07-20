@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lineage package &mdash; lineage 1.0b1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="lineage 1.0b1 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> lineage
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0b1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">lineage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lineage</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>lineage package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lineage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lineage-package">
+<h1>lineage package<a class="headerlink" href="#lineage-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lineage.individual">
+<span id="lineage-individual-module"></span><h2>lineage.individual module<a class="headerlink" href="#module-lineage.individual" title="Permalink to this headline">¶</a></h2>
+<p>Class for representing individuals within the <cite>lineage</cite> framework.</p>
+<dl class="class">
+<dt id="lineage.individual.Individual">
+<em class="property">class </em><code class="descclassname">lineage.individual.</code><code class="descname">Individual</code><span class="sig-paren">(</span><em>name</em>, <em>raw_data=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/individual.html#Individual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.individual.Individual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Object used to represent and interact with an individual.</p>
+<p>The <cite>Individual</cite> object maintains information about an individual. The object provides
+methods for loading an individual’s genetic data (SNPs) and normalizing it for use with the
+<cite>lineage</cite> framework.</p>
+<dl class="method">
+<dt id="lineage.individual.Individual.get_var_name">
+<code class="descname">get_var_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/individual.html#Individual.get_var_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.individual.Individual.get_var_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean a string so that it can be a valid Python variable
+name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">cleaned string that can be used as a variable name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lineage.individual.Individual.load_snps">
+<code class="descname">load_snps</code><span class="sig-paren">(</span><em>raw_data</em>, <em>discrepant_snp_positions_threshold=100</em>, <em>discrepant_genotypes_threshold=10000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/individual.html#Individual.load_snps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.individual.Individual.load_snps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load raw genotype data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>raw_data</strong> (<em>list or str</em>) – path(s) to file(s) with raw genotype data</li>
+<li><strong>discrepant_snp_positions_threshold</strong> (<em>int</em>) – threshold for discrepant SNP positions between existing data and data to be loaded,
+a large value could indicate mismatched genome assemblies</li>
+<li><strong>discrepant_genotypes_threshold</strong> (<em>int</em>) – threshold for discrepant genotype data between existing data and data to be loaded,
+a large value could indicated mismatched individuals</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lineage.individual.Individual.name">
+<code class="descname">name</code><a class="headerlink" href="#lineage.individual.Individual.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lineage.individual.Individual.save_snps">
+<code class="descname">save_snps</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/individual.html#Individual.save_snps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.individual.Individual.save_snps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save SNPs to file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<em>str</em>) – path to file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lineage.individual.Individual.snps">
+<code class="descname">snps</code><a class="headerlink" href="#lineage.individual.Individual.snps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lineage.resources">
+<span id="lineage-resources-module"></span><h2>lineage.resources module<a class="headerlink" href="#module-lineage.resources" title="Permalink to this headline">¶</a></h2>
+<p>Class for downloading and loading required external resources.</p>
+<dl class="class">
+<dt id="lineage.resources.Resources">
+<em class="property">class </em><code class="descclassname">lineage.resources.</code><code class="descname">Resources</code><span class="sig-paren">(</span><em>resources_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Object used to manage resources required by <cite>lineage</cite>.</p>
+<dl class="method">
+<dt id="lineage.resources.Resources.get_cytoband_h36">
+<code class="descname">get_cytoband_h36</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources.get_cytoband_h36"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources.get_cytoband_h36" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lineage.resources.Resources.get_cytoband_h37">
+<code class="descname">get_cytoband_h37</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources.get_cytoband_h37"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources.get_cytoband_h37" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lineage.resources.Resources.get_hapmap_h36">
+<code class="descname">get_hapmap_h36</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources.get_hapmap_h36"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources.get_hapmap_h36" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="lineage.resources.Resources.get_hapmap_h37">
+<code class="descname">get_hapmap_h37</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources.get_hapmap_h37"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources.get_hapmap_h37" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lineage.visualization">
+<span id="lineage-visualization-module"></span><h2>lineage.visualization module<a class="headerlink" href="#module-lineage.visualization" title="Permalink to this headline">¶</a></h2>
+<p>Chromosome plotting functions.</p>
+<p class="rubric">Notes</p>
+<p>Adapted from Ryan Dale’s GitHub Gist for plotting chromosome features
+(see <a href="#id2"><span class="problematic" id="id3"><span id="id1"></span>[1]_</span></a>).</p>
+<p class="rubric">References</p>
+<dl class="docutils">
+<dt>..[1] Ryan Dale, GitHub Gist,</dt>
+<dd><a class="reference external" href="https://gist.github.com/daler/c98fc410282d7570efc3#file-ideograms-py">https://gist.github.com/daler/c98fc410282d7570efc3#file-ideograms-py</a></dd>
+</dl>
+<dl class="function">
+<dt id="lineage.visualization.plot_chromosomes">
+<code class="descclassname">lineage.visualization.</code><code class="descname">plot_chromosomes</code><span class="sig-paren">(</span><em>markers</em>, <em>cytobands</em>, <em>path</em>, <em>title</em>, <em>build</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/visualization.html#plot_chromosomes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.visualization.plot_chromosomes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots chromosomes with designated markers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>markers</strong> (<em>list of dicts</em>) – segments to highlight on the chromosomes</li>
+<li><strong>cytobands</strong> (<em>pandas.DataFrame</em>) – cytobands table loaded with Resources</li>
+<li><strong>path</strong> (<em>str</em>) – path to destination <cite>.png</cite> file</li>
+<li><strong>title</strong> (<em>str</em>) – title for plot</li>
+<li><strong>build</strong> (<em>{36, 37}</em>) – human genome assembly</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lineage">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lineage" title="Permalink to this headline">¶</a></h2>
+<p>lineage</p>
+<p>tools for genetic genealogy and the analysis of consumer DNA test results</p>
+<dl class="class">
+<dt id="lineage.Lineage">
+<em class="property">class </em><code class="descclassname">lineage.</code><code class="descname">Lineage</code><span class="sig-paren">(</span><em>output_dir='output'</em>, <em>resources_dir='resources'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#Lineage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.Lineage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lineage.Lineage.find_discordant_snps">
+<code class="descname">find_discordant_snps</code><span class="sig-paren">(</span><em>individual1</em>, <em>individual2</em>, <em>individual3=None</em>, <em>save_output=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#Lineage.find_discordant_snps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.Lineage.find_discordant_snps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find discordant SNPs between two or three individuals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>individual1</strong> (<em>Individual</em>) – reference individual (child if <cite>individual2</cite> and <cite>individual3</cite> are parents)</li>
+<li><strong>individual2</strong> (<em>Individual</em>) – comparison individual</li>
+<li><strong>individual3</strong> (<em>Individual</em>) – other parent if <cite>individual1</cite> is child and <cite>individual2</cite> is a parent</li>
+<li><strong>save_output</strong> (<em>bool</em>) – specifies whether to save output to a CSV file in the output directory</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">discordant SNPs and associated genetic data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">pandas.DataFrame</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<dl class="docutils">
+<dt>..[1] David Pike, “Search for Discordant SNPs in Parent-Child</dt>
+<dd>Raw Data Files,” David Pike’s Utilities,
+<a class="reference external" href="http://www.math.mun.ca/~dapike/FF23utils/pair-discord.php">http://www.math.mun.ca/~dapike/FF23utils/pair-discord.php</a></dd>
+<dt>..[2] David Pike, “Search for Discordant SNPs when given data</dt>
+<dd>for child and both parents,” David Pike’s Utilities,
+<a class="reference external" href="http://www.math.mun.ca/~dapike/FF23utils/trio-discord.php">http://www.math.mun.ca/~dapike/FF23utils/trio-discord.php</a></dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lineage.Lineage.find_shared_dna">
+<code class="descname">find_shared_dna</code><span class="sig-paren">(</span><em>individual1</em>, <em>individual2</em>, <em>build=37</em>, <em>cM_threshold=0.75</em>, <em>snp_threshold=1100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#Lineage.find_shared_dna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.Lineage.find_shared_dna" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the shared DNA between two individuals.</p>
+<p>Computes the genetic distance in centimorgans (cMs) between SNPs using the specified
+assembly’s HapMap. Applies thresholds to determine the shared DNA. Plots shared DNA.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>individual1</strong> (<em>Individual</em>)</li>
+<li><strong>individual2</strong> (<em>Individual</em>)</li>
+<li><strong>build</strong> (<em>{36, 37}</em>) – human genome assembly</li>
+<li><strong>cM_threshold</strong> (<em>float</em>) – minimum centimorgans for each shared DNA segment</li>
+<li><strong>snp_threshold</strong> (<em>int</em>) – minimum SNPs for each shared DNA segment</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="lineage.dir_exists">
+<code class="descclassname">lineage.</code><code class="descname">dir_exists</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#dir_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.dir_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lineage.save_df_as_csv">
+<code class="descclassname">lineage.</code><code class="descname">save_df_as_csv</code><span class="sig-paren">(</span><em>df</em>, <em>path</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#save_df_as_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.save_df_as_csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Andrew Riha.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0b1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

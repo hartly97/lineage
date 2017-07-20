@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lineage.individual &mdash; lineage 1.0b1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="lineage 1.0b1 documentation" href="../../index.html"/>
+        <link rel="up" title="lineage" href="../lineage.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> lineage
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0b1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">lineage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">lineage</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../lineage.html">lineage</a> &raquo;</li>
+        
+      <li>lineage.individual</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lineage.individual</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; Class for representing individuals within the `lineage` framework. &quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (C) 2016 Andrew Riha</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="Individual"><a class="viewcode-back" href="../../lineage.html#lineage.individual.Individual">[docs]</a><span class="k">class</span> <span class="nc">Individual</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Object used to represent and interact with an individual.</span>
+
+<span class="sd">    The `Individual` object maintains information about an individual. The object provides</span>
+<span class="sd">    methods for loading an individual&#39;s genetic data (SNPs) and normalizing it for use with the</span>
+<span class="sd">    `lineage` framework.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">raw_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initialize an individual.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            name of the individual</span>
+<span class="sd">        raw_data : list or str</span>
+<span class="sd">            path(s) to file(s) with raw genotype data</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">raw_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_snps</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Individual(</span><span class="si">{!r}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">snps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Individual.load_snps"><a class="viewcode-back" href="../../lineage.html#lineage.individual.Individual.load_snps">[docs]</a>    <span class="k">def</span> <span class="nf">load_snps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">,</span> <span class="n">discrepant_snp_positions_threshold</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                  <span class="n">discrepant_genotypes_threshold</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load raw genotype data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        raw_data : list or str</span>
+<span class="sd">            path(s) to file(s) with raw genotype data</span>
+<span class="sd">        discrepant_snp_positions_threshold : int</span>
+<span class="sd">            threshold for discrepant SNP positions between existing data and data to be loaded,</span>
+<span class="sd">            a large value could indicate mismatched genome assemblies</span>
+<span class="sd">        discrepant_genotypes_threshold : int</span>
+<span class="sd">            threshold for discrepant genotype data between existing data and data to be loaded,</span>
+<span class="sd">            a large value could indicated mismatched individuals</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add_snps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_read_raw_data</span><span class="p">(</span><span class="n">file</span><span class="p">),</span> <span class="n">discrepant_snp_positions_threshold</span><span class="p">,</span>
+                               <span class="n">discrepant_genotypes_threshold</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_snps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_read_raw_data</span><span class="p">(</span><span class="n">raw_data</span><span class="p">),</span> <span class="n">discrepant_snp_positions_threshold</span><span class="p">,</span>
+                           <span class="n">discrepant_genotypes_threshold</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;invalid filetype&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Individual.save_snps"><a class="viewcode-back" href="../../lineage.html#lineage.individual.Individual.save_snps">[docs]</a>    <span class="k">def</span> <span class="nf">save_snps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Save SNPs to file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file : str</span>
+<span class="sd">            path to file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">na_rep</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;chromosome&#39;</span><span class="p">,</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;genotype&#39;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;no SNPs to save...&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Individual.get_var_name"><a class="viewcode-back" href="../../lineage.html#lineage.individual.Individual.get_var_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_var_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Clean a string so that it can be a valid Python variable</span>
+<span class="sd">        name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            cleaned string that can be used as a variable name</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\W|^(?=\d)&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># [SO-02]</span></div>
+
+    <span class="k">def</span> <span class="nf">_read_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39; does not exist; skipping&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># peek into files to determine the data format</span>
+        <span class="k">if</span> <span class="s1">&#39;.zip&#39;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">z</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">namelist</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="c1"># https://stackoverflow.com/a/606199</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;.gz&#39;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s1">&#39;23andMe&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_23andme</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;Ancestry&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_ancestry</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;RSID&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_ftdna</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_read_23andme</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Read and parse 23andMe file.</span>
+
+<span class="sd">        https://www.23andme.com</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file : str</span>
+<span class="sd">            path to file</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            individual&#39;s genetic data normalized for use with `lineage`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span>
+                               <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rsid&#39;</span><span class="p">,</span> <span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="s1">&#39;genotype&#39;</span><span class="p">],</span>
+                               <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;chrom&#39;</span><span class="p">:</span> <span class="nb">object</span><span class="p">})</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_read_ftdna</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Read and parse Family Tree DNA (FTDNA) file.</span>
+
+<span class="sd">        https://www.familytreedna.com</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file : str</span>
+<span class="sd">            path to file</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            individual&#39;s genetic data normalized for use with `lineage`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span>
+                               <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rsid&#39;</span><span class="p">,</span> <span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="s1">&#39;genotype&#39;</span><span class="p">],</span>
+                               <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;chrom&#39;</span><span class="p">:</span> <span class="nb">object</span><span class="p">})</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_read_ancestry</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Read and parse Ancestry.com file.</span>
+
+<span class="sd">        http://www.ancestry.com</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file : str</span>
+<span class="sd">            path to file</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            individual&#39;s genetic data normalized for use with `lineage`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                             <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rsid&#39;</span><span class="p">,</span> <span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="s1">&#39;allele1&#39;</span><span class="p">,</span> <span class="s1">&#39;allele2&#39;</span><span class="p">],</span>
+                             <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;chrom&#39;</span><span class="p">:</span> <span class="nb">object</span><span class="p">})</span>
+
+            <span class="c1"># create genotype column from allele columns</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;allele1&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;allele2&#39;</span><span class="p">]</span>
+
+            <span class="c1"># delete allele columns [SO-01]</span>
+            <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;allele1&#39;</span><span class="p">]</span>
+            <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;allele2&#39;</span><span class="p">]</span>
+
+            <span class="c1"># https://redd.it/5y90un</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;23&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;X&#39;</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;24&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Y&#39;</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;25&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;PAR&#39;</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;26&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;MT&#39;</span>
+
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_add_snps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">snps</span><span class="p">,</span> <span class="n">discrepant_snp_positions_threshold</span><span class="p">,</span> <span class="n">discrepant_genotypes_threshold</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Add SNPs to this Individual.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        snps : pandas.DataFrame</span>
+<span class="sd">            SNPs to add</span>
+<span class="sd">        discrepant_snp_positions_threshold : int</span>
+<span class="sd">            see above</span>
+<span class="sd">        discrepant_genotypes_threshold : int</span>
+<span class="sd">            see above</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">snps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># ensure there area always two X alleles</span>
+        <span class="n">snps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_double_single_alleles</span><span class="p">(</span><span class="n">snps</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span> <span class="o">=</span> <span class="n">snps</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">common_snps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">snps</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">rsuffix</span><span class="o">=</span><span class="s1">&#39;_added&#39;</span><span class="p">)</span>
+
+            <span class="n">discrepant_positions</span> <span class="o">=</span> <span class="n">common_snps</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                <span class="p">(</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;chrom_added&#39;</span><span class="p">])</span> <span class="o">|</span>
+                <span class="p">(</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;pos_added&#39;</span><span class="p">])]</span>
+
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">discrepant_positions</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">discrepant_snp_positions_threshold</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;some SNP positions being added differ; keeping original positions&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">discrepant_positions</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">discrepant_positions</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">discrepant_snp_positions_threshold</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;too many SNPs differ in position; ensure same genome build is being used&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="c1"># remove null genotypes</span>
+            <span class="n">common_snps</span> <span class="o">=</span> <span class="n">common_snps</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span> <span class="o">&amp;</span>
+                                          <span class="o">~</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype_added&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>
+
+            <span class="c1"># discrepant genotypes are where alleles are not equivalent (i.e., alleles are not the</span>
+            <span class="c1"># same and not swapped)</span>
+            <span class="n">discrepant_genotypes</span> <span class="o">=</span> <span class="n">common_snps</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                <span class="p">((</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span>
+                 <span class="p">(</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype_added&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span>
+                 <span class="o">~</span><span class="p">(</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype_added&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">|</span>
+                <span class="p">((</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+                 <span class="p">(</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype_added&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
+                 <span class="o">~</span><span class="p">((</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype_added&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span>
+                   <span class="p">(</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype_added&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&amp;</span>
+                 <span class="o">~</span><span class="p">((</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype_added&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span>
+                   <span class="p">(</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype_added&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])))]</span>
+
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">discrepant_genotypes</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">discrepant_genotypes_threshold</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;some genotypes were discrepant; marking those as null&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">discrepant_genotypes</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">discrepant_genotypes</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">discrepant_genotypes_threshold</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;too many SNPs differ in their genotype; ensure file is for same &#39;</span>
+                      <span class="s1">&#39;individual&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="c1"># add new SNPs</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="n">snps</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">discrepant_genotypes</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;genotype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+            <span class="c1"># combine_first converts position to float64, so convert it back to int64</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sort_snps</span><span class="p">()</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_double_single_alleles</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">chrom</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Double any single alleles in the specified chromosome.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df : pandas.DataFrame</span>
+<span class="sd">            SNPs</span>
+<span class="sd">        chrom : str</span>
+<span class="sd">            chromosome of alleles to double</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        df : pandas.DataFrame</span>
+<span class="sd">            SNPs with specified chromosome&#39;s single alleles doubled</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># find all single alleles of the specified chromosome</span>
+        <span class="n">single_alleles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">)</span> <span class="o">&amp;</span>
+                                  <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># double those alleles</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">single_alleles</span><span class="p">,</span> <span class="s1">&#39;genotype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">single_alleles</span><span class="p">,</span> <span class="s1">&#39;genotype&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">_sort_snps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sort this individual&#39;s SNPs. &quot;&quot;&quot;</span>
+
+        <span class="n">sorted_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_natural_sort_key</span><span class="p">)</span>
+
+        <span class="c1"># move PAR and MT to the end of the dataframe</span>
+        <span class="k">if</span> <span class="s1">&#39;PAR&#39;</span> <span class="ow">in</span> <span class="n">sorted_list</span><span class="p">:</span>
+            <span class="n">sorted_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;PAR&#39;</span><span class="p">)</span>
+            <span class="n">sorted_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;PAR&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;MT&#39;</span> <span class="ow">in</span> <span class="n">sorted_list</span><span class="p">:</span>
+            <span class="n">sorted_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;MT&#39;</span><span class="p">)</span>
+            <span class="n">sorted_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;MT&#39;</span><span class="p">)</span>
+
+        <span class="c1"># https://stackoverflow.com/a/26707444</span>
+        <span class="c1"># convert chrom column to category for sorting</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="n">sorted_list</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># sort based on ordered chromosome list and position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">])</span>
+
+        <span class="c1"># convert chromosome back to object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+
+    <span class="c1"># https://stackoverflow.com/a/16090640</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_natural_sort_key</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">natural_sort_re</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;([0-9]+)&#39;</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">natural_sort_re</span><span class="p">,</span> <span class="n">s</span><span class="p">)]</span></div>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Stack Overflow Attributions</span>
+<span class="sd">---------------------------</span>
+
+<span class="sd">[SO-##] references throughout the code above correspond to the following</span>
+<span class="sd">content from Stack Overflow (http://stackoverflow.com):</span>
+
+<span class="sd">[SO-01] &quot;Delete column from pandas DataFrame&quot;</span>
+<span class="sd">        http://stackoverflow.com/q/13411544</span>
+<span class="sd">        John : http://stackoverflow.com/users/390388/john</span>
+<span class="sd">        http://stackoverflow.com/a/13485766</span>
+<span class="sd">        Wes McKinney : http://stackoverflow.com/users/776560/wes-mckinney</span>
+
+<span class="sd">[SO-02] &quot;how do I convert a string to a valid variable name in python?&quot;</span>
+<span class="sd">        http://stackoverflow.com/q/3303312</span>
+<span class="sd">        George Profenza : http://stackoverflow.com/users/89766/george-profenza</span>
+<span class="sd">        http://stackoverflow.com/a/3305731</span>
+<span class="sd">        Nas Banov : http://stackoverflow.com/users/226086/nas-banov</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Andrew Riha.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0b1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
