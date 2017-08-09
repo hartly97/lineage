@@ -271,7 +271,7 @@ a large value could indicated mismatched individuals</li>
 <p>Chromosome plotting functions.</p>
 <p class="rubric">Notes</p>
 <p>Adapted from Ryan Dale’s GitHub Gist for plotting chromosome features
-(see <a href="#id2"><span class="problematic" id="id3"><span id="id1"></span>[1]_</span></a>).</p>
+(see <a href="#id2"><span class="problematic" id="id1">[1]_</span></a>).</p>
 <p class="rubric">References</p>
 <dl class="docutils">
 <dt>..[1] Ryan Dale, GitHub Gist,</dt>
@@ -307,6 +307,30 @@ a large value could indicated mismatched individuals</li>
 <dt id="lineage.Lineage">
 <em class="property">class </em><code class="descclassname">lineage.</code><code class="descname">Lineage</code><span class="sig-paren">(</span><em>output_dir='output'</em>, <em>resources_dir='resources'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#Lineage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.Lineage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="lineage.Lineage.create_individual">
+<code class="descname">create_individual</code><span class="sig-paren">(</span><em>name</em>, <em>raw_data=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#Lineage.create_individual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.Lineage.create_individual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize an individual in the context of the <cite>lineage</cite> framework.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – name of the individual</li>
+<li><strong>raw_data</strong> (<em>list or str</em>) – path(s) to file(s) with raw genotype data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">Individual</span></code> initialized in the context of the <cite>lineage</cite> framework</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#lineage.individual.Individual" title="lineage.individual.Individual">Individual</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="lineage.Lineage.find_discordant_snps">
 <code class="descname">find_discordant_snps</code><span class="sig-paren">(</span><em>individual1</em>, <em>individual2</em>, <em>individual3=None</em>, <em>save_output=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#Lineage.find_discordant_snps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.Lineage.find_discordant_snps" title="Permalink to this definition">¶</a></dt>

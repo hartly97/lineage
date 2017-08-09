@@ -195,6 +195,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="n">Resources</span><span class="p">(</span><span class="n">resources_dir</span><span class="o">=</span><span class="n">resources_dir</span><span class="p">)</span>
 
+<div class="viewcode-block" id="Lineage.create_individual"><a class="viewcode-back" href="../lineage.html#lineage.Lineage.create_individual">[docs]</a>    <span class="k">def</span> <span class="nf">create_individual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">raw_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initialize an individual in the context of the `lineage` framework.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            name of the individual</span>
+<span class="sd">        raw_data : list or str</span>
+<span class="sd">            path(s) to file(s) with raw genotype data</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Individual</span>
+<span class="sd">            ``Individual`` initialized in the context of the `lineage` framework</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Individual</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Lineage.find_discordant_snps"><a class="viewcode-back" href="../lineage.html#lineage.Lineage.find_discordant_snps">[docs]</a>    <span class="k">def</span> <span class="nf">find_discordant_snps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual1</span><span class="p">,</span> <span class="n">individual2</span><span class="p">,</span> <span class="n">individual3</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Find discordant SNPs between two or three individuals.</span>
 
