@@ -444,17 +444,15 @@
             <span class="c1"># discrepant SNP</span>
             <span class="n">adjacent_ix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">matches_passed</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">matches_passed</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
 
-            <span class="c1"># TODO: check when first one_chrom_match value is false</span>
-
             <span class="c1"># if there are adjacent segments</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">adjacent_ix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">matches_stitched</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-                <span class="n">prev</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">prev</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
                 <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
 
                 <span class="c1"># stitch together adjacent segments</span>
                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">matches_passed</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">prev</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">prev</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">prev</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                         <span class="n">matches_stitched</span><span class="p">[</span><span class="n">counter</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">matches_stitched</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">matches_stitched</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
