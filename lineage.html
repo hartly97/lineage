@@ -313,14 +313,15 @@ remapping.</p>
 </dl>
 <dl class="function">
 <dt id="lineage.visualization.plot_chromosomes">
-<code class="descclassname">lineage.visualization.</code><code class="descname">plot_chromosomes</code><span class="sig-paren">(</span><em>markers</em>, <em>cytobands</em>, <em>path</em>, <em>title</em>, <em>build</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/visualization.html#plot_chromosomes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.visualization.plot_chromosomes" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">lineage.visualization.</code><code class="descname">plot_chromosomes</code><span class="sig-paren">(</span><em>one_chrom_match</em>, <em>two_chrom_match</em>, <em>cytobands</em>, <em>path</em>, <em>title</em>, <em>build</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/visualization.html#plot_chromosomes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.visualization.plot_chromosomes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots chromosomes with designated markers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>markers</strong> (<em>list of dicts</em>) – segments to highlight on the chromosomes</li>
+<li><strong>one_chrom_match</strong> (<em>list of dicts</em>) – segments to highlight on the chromosomes representing one shared chromosome</li>
+<li><strong>two_chrom_match</strong> (<em>list of dicts</em>) – segments to highlight on the chromosomes representing two shared chromosomes</li>
 <li><strong>cytobands</strong> (<em>pandas.DataFrame</em>) – cytobands table loaded with Resources</li>
 <li><strong>path</strong> (<em>str</em>) – path to destination <cite>.png</cite> file</li>
 <li><strong>title</strong> (<em>str</em>) – title for plot</li>

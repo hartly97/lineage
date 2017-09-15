@@ -219,15 +219,17 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="k">import</span> <span class="n">BrokenBarHCollection</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">patches</span>
 
-
-<div class="viewcode-block" id="plot_chromosomes"><a class="viewcode-back" href="../../lineage.html#lineage.visualization.plot_chromosomes">[docs]</a><span class="k">def</span> <span class="nf">plot_chromosomes</span><span class="p">(</span><span class="n">markers</span><span class="p">,</span> <span class="n">cytobands</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">build</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_chromosomes"><a class="viewcode-back" href="../../lineage.html#lineage.visualization.plot_chromosomes">[docs]</a><span class="k">def</span> <span class="nf">plot_chromosomes</span><span class="p">(</span><span class="n">one_chrom_match</span><span class="p">,</span> <span class="n">two_chrom_match</span><span class="p">,</span> <span class="n">cytobands</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">build</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Plots chromosomes with designated markers.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    markers : list of dicts</span>
-<span class="sd">        segments to highlight on the chromosomes</span>
+<span class="sd">    one_chrom_match : list of dicts</span>
+<span class="sd">        segments to highlight on the chromosomes representing one shared chromosome</span>
+<span class="sd">    two_chrom_match : list of dicts</span>
+<span class="sd">        segments to highlight on the chromosomes representing two shared chromosomes</span>
 <span class="sd">    cytobands : pandas.DataFrame</span>
 <span class="sd">        cytobands table loaded with Resources</span>
 <span class="sd">    path : str</span>
@@ -265,12 +267,13 @@
 
     <span class="c1"># Colors for different chromosome stains</span>
     <span class="n">color_lookup</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;gneg&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">66</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">69</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">121</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span>  <span class="c1"># background</span>
-        <span class="s1">&#39;match&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">176</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">240</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span>
-        <span class="s1">&#39;centromere&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="s1">&#39;gneg&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">202</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">202</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">202</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span>  <span class="c1"># background</span>
+        <span class="s1">&#39;one_chrom&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">176</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">240</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span>
+        <span class="s1">&#39;two_chrom&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">66</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">69</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">121</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span>
+        <span class="s1">&#39;centromere&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">)</span>
     <span class="p">}</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">_patch_chromosomal_features</span><span class="p">(</span><span class="n">cytobands</span><span class="p">,</span> <span class="n">markers</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">_patch_chromosomal_features</span><span class="p">(</span><span class="n">cytobands</span><span class="p">,</span> <span class="n">one_chrom_match</span><span class="p">,</span> <span class="n">two_chrom_match</span><span class="p">)</span>
 
     <span class="c1"># Add a new column for colors</span>
     <span class="n">df</span><span class="p">[</span><span class="s1">&#39;colors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;gie_stain&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">color_lookup</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
@@ -282,7 +285,6 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="c1"># Now all we have to do is call our function for the chromosome data...</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;adding chromosomes...&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">collection</span> <span class="ow">in</span> <span class="n">_chromosome_collections</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">chrom_ybase</span><span class="p">,</span> <span class="n">chrom_height</span><span class="p">):</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
 
@@ -292,8 +294,26 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">margins</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 
-    <span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;Shared DNA&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-             <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;square&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">176</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">240</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">))</span>
+    <span class="n">handles</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># setup legend</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">one_chrom_match</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">one_chrom_patch</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color_lookup</span><span class="p">[</span><span class="s1">&#39;one_chrom&#39;</span><span class="p">],</span>
+                                         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;One chromosome shared&#39;</span><span class="p">)</span>
+        <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">one_chrom_patch</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">two_chrom_match</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">two_chrom_patch</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color_lookup</span><span class="p">[</span><span class="s1">&#39;two_chrom&#39;</span><span class="p">],</span>
+                                         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Two chromosomes shared&#39;</span><span class="p">)</span>
+        <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">two_chrom_patch</span><span class="p">)</span>
+
+    <span class="n">no_match_patch</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color_lookup</span><span class="p">[</span><span class="s1">&#39;gneg&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;No shared DNA&#39;</span><span class="p">)</span>
+    <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">no_match_patch</span><span class="p">)</span>
+
+    <span class="n">centromere_patch</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">234</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">234</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">234</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Centromere&#39;</span><span class="p">)</span>
+    <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">centromere_patch</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">handles</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">))</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Build &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">build</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; Chromosome Position&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -334,15 +354,17 @@
         <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_patch_chromosomal_features</span><span class="p">(</span><span class="n">cytobands</span><span class="p">,</span> <span class="n">markers</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_patch_chromosomal_features</span><span class="p">(</span><span class="n">cytobands</span><span class="p">,</span> <span class="n">one_chrom_match</span><span class="p">,</span> <span class="n">two_chrom_match</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Highlight positions for each chromosome segment / feature.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    cytobands : pandas.DataFrame</span>
 <span class="sd">        cytoband table from UCSC</span>
-<span class="sd">    markers : list of dicts</span>
-<span class="sd">        segments to highlight on the chromosomes</span>
+<span class="sd">    one_chrom_match : list of dicts</span>
+<span class="sd">        segments to highlight on the chromosomes representing one shared chromosome</span>
+<span class="sd">    two_chrom_match : list of dicts</span>
+<span class="sd">        segments to highlight on the chromosomes representing two shared chromosomes</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -361,16 +383,24 @@
             <span class="n">cytobands</span><span class="p">[</span><span class="n">cytobands</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chromosome</span><span class="p">][</span><span class="s2">&quot;end&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
         <span class="c1"># get all markers for this chromosome</span>
-        <span class="n">chromosome_markers</span> <span class="o">=</span> <span class="p">[</span><span class="n">marker</span> <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">markers</span> <span class="k">if</span> <span class="n">marker</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chromosome</span><span class="p">]</span>
+        <span class="n">one_chrom_match_markers</span> <span class="o">=</span> <span class="p">[</span><span class="n">marker</span> <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">one_chrom_match</span> <span class="k">if</span> <span class="n">marker</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chromosome</span><span class="p">]</span>
+        <span class="n">two_chrom_match_markers</span> <span class="o">=</span> <span class="p">[</span><span class="n">marker</span> <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">two_chrom_match</span> <span class="k">if</span> <span class="n">marker</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chromosome</span><span class="p">]</span>
 
+        <span class="c1"># background of chromosome</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;chrom&quot;</span><span class="p">:</span> <span class="n">chromosome</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">chromosome_length</span><span class="p">,</span>
                         <span class="s2">&quot;gie_stain&quot;</span><span class="p">:</span> <span class="s2">&quot;gneg&quot;</span><span class="p">},</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">chromosome_markers</span><span class="p">:</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;chrom&quot;</span><span class="p">:</span> <span class="n">chromosome</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">marker</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">marker</span><span class="p">[</span>
-                <span class="s2">&quot;end&quot;</span><span class="p">],</span>
+        <span class="c1"># add markers for shared DNA on one chromosome</span>
+        <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">one_chrom_match_markers</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;chrom&quot;</span><span class="p">:</span> <span class="n">chromosome</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">marker</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">marker</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">],</span>
                             <span class="s2">&quot;gie_stain&quot;</span><span class="p">:</span> <span class="n">marker</span><span class="p">[</span><span class="s2">&quot;gie_stain&quot;</span><span class="p">]},</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+        <span class="c1"># add markers for shared DNA on both chromosomes</span>
+        <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">two_chrom_match_markers</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;chrom&quot;</span><span class="p">:</span> <span class="n">chromosome</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">marker</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">marker</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">],</span>
+                            <span class="s2">&quot;gie_stain&quot;</span><span class="p">:</span> <span class="n">marker</span><span class="p">[</span><span class="s2">&quot;gie_stain&quot;</span><span class="p">]},</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># add centromeres</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cytobands</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">cytobands</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">chromosome</span><span class="p">)</span> <span class="o">&amp;</span>
                                   <span class="p">(</span><span class="n">cytobands</span><span class="p">[</span><span class="s2">&quot;gie_stain&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;acen&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;chrom&quot;</span><span class="p">:</span> <span class="n">chromosome</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">end</span><span class="p">,</span>
