@@ -215,7 +215,7 @@ a large value could indicated mismatched individuals</li>
 
 <dl class="method">
 <dt id="lineage.individual.Individual.remap_snps">
-<code class="descname">remap_snps</code><span class="sig-paren">(</span><em>source_assembly</em>, <em>target_assembly</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/individual.html#Individual.remap_snps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.individual.Individual.remap_snps" title="Permalink to this definition">¶</a></dt>
+<code class="descname">remap_snps</code><span class="sig-paren">(</span><em>source_assembly</em>, <em>target_assembly</em>, <em>complement_bases=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/individual.html#Individual.remap_snps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.individual.Individual.remap_snps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remap the SNP coordinates of this <code class="docutils literal"><span class="pre">Individual</span></code> from one assembly to another.</p>
 <p>This method uses the assembly map endpoint of the Ensembl REST API service (via this
 <code class="docutils literal"><span class="pre">Individual</span></code>’s <code class="docutils literal"><span class="pre">EnsemblRestClient</span></code>) to convert SNP coordinates / positions from one
@@ -228,6 +228,7 @@ SNPs will be that of the target assembly.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>source_assembly</strong> (<em>{‘NCBI36’, ‘GRCh37’, ‘GRCh38’}</em>) – starting assembly of an Individual’s SNPs</li>
 <li><strong>target_assembly</strong> (<em>{‘NCBI36’, ‘GRCh37’, ‘GRCh38’}</em>) – assembly to remap to</li>
+<li><strong>complement_bases</strong> (<em>bool</em>) – complement bases when remapping SNPs to the minus strand</li>
 </ul>
 </td>
 </tr>

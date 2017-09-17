@@ -291,7 +291,7 @@
 
         <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\W|^(?=\d)&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># [SO-02]</span></div>
 
-<div class="viewcode-block" id="Individual.remap_snps"><a class="viewcode-back" href="../../lineage.html#lineage.individual.Individual.remap_snps">[docs]</a>    <span class="k">def</span> <span class="nf">remap_snps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_assembly</span><span class="p">,</span> <span class="n">target_assembly</span><span class="p">):</span>
+<div class="viewcode-block" id="Individual.remap_snps"><a class="viewcode-back" href="../../lineage.html#lineage.individual.Individual.remap_snps">[docs]</a>    <span class="k">def</span> <span class="nf">remap_snps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_assembly</span><span class="p">,</span> <span class="n">target_assembly</span><span class="p">,</span> <span class="n">complement_bases</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Remap the SNP coordinates of this ``Individual`` from one assembly to another.</span>
 
 <span class="sd">        This method uses the assembly map endpoint of the Ensembl REST API service (via this</span>
@@ -305,6 +305,8 @@
 <span class="sd">            starting assembly of an Individual&#39;s SNPs</span>
 <span class="sd">        target_assembly : {&#39;NCBI36&#39;, &#39;GRCh37&#39;, &#39;GRCh38&#39;}</span>
 <span class="sd">            assembly to remap to</span>
+<span class="sd">        complement_bases : bool</span>
+<span class="sd">            complement bases when remapping SNPs to the minus strand</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -369,23 +371,51 @@
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;discrepant coords&#39;</span><span class="p">)</span>  <span class="c1"># observed when mapping NCBI36 -&gt; GRCh38</span>
                     <span class="k">continue</span>
 
-                <span class="n">offset</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">[</span><span class="s1">&#39;mapped&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">mapping</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]</span>
-
                 <span class="c1"># find the SNPs that are being remapped for this mapping</span>
                 <span class="n">snp_indices</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">temp</span><span class="p">[</span><span class="s1">&#39;remapped&#39;</span><span class="p">]</span> <span class="o">&amp;</span>
                                    <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">mapping</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">])</span> <span class="o">&amp;</span>
                                    <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">mapping</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">])]</span><span class="o">.</span><span class="n">index</span>
 
-                <span class="c1"># remap the SNPs</span>
-                <span class="n">temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">snp_indices</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">snp_indices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># remap the SNPs</span>
+                    <span class="k">if</span> <span class="n">mapping</span><span class="p">[</span><span class="s1">&#39;mapped&#39;</span><span class="p">][</span><span class="s1">&#39;strand&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="c1"># flip and (optionally) complement since we&#39;re mapping to minus strand</span>
+                        <span class="n">diff_from_start</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">snp_indices</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">mapping</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]</span>
+                        <span class="n">temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">snp_indices</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">[</span><span class="s1">&#39;mapped&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">diff_from_start</span>
 
-                <span class="c1"># mark these SNPs as remapped</span>
-                <span class="n">temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">snp_indices</span><span class="p">,</span> <span class="s1">&#39;remapped&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">if</span> <span class="n">complement_bases</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">snp_indices</span><span class="p">,</span> <span class="s1">&#39;genotype&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                                <span class="n">temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">snp_indices</span><span class="p">,</span> <span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_complement_bases</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># mapping is on same (plus) strand, so just remap based on offset</span>
+                        <span class="n">offset</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">[</span><span class="s1">&#39;mapped&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">mapping</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]</span>
+                        <span class="n">temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">snp_indices</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span>
+
+                    <span class="c1"># mark these SNPs as remapped</span>
+                    <span class="n">temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">snp_indices</span><span class="p">,</span> <span class="s1">&#39;remapped&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="c1"># update SNP positions for this chrom</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">temp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_sort_snps</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_complement_bases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genotype</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">genotype</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="n">complement</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">genotype</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">base</span> <span class="o">==</span> <span class="s1">&#39;A&#39;</span><span class="p">:</span>
+                <span class="n">complement</span> <span class="o">+=</span> <span class="s1">&#39;T&#39;</span>
+            <span class="k">elif</span> <span class="n">base</span> <span class="o">==</span> <span class="s1">&#39;G&#39;</span><span class="p">:</span>
+                <span class="n">complement</span> <span class="o">+=</span> <span class="s1">&#39;C&#39;</span>
+            <span class="k">elif</span> <span class="n">base</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+                <span class="n">complement</span> <span class="o">+=</span> <span class="s1">&#39;G&#39;</span>
+            <span class="k">elif</span> <span class="n">base</span> <span class="o">==</span> <span class="s1">&#39;T&#39;</span><span class="p">:</span>
+                <span class="n">complement</span> <span class="o">+=</span> <span class="s1">&#39;A&#39;</span>
+
+        <span class="k">return</span> <span class="n">complement</span>
 
     <span class="k">def</span> <span class="nf">_read_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
