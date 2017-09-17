@@ -546,7 +546,8 @@
                 <span class="p">(</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;pos_added&#39;</span><span class="p">])]</span>
 
             <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">discrepant_positions</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">discrepant_snp_positions_threshold</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;some SNP positions being added differ; keeping original positions&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">discrepant_positions</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39; SNP positions being added differ; &#39;</span>
+                      <span class="s1">&#39;keeping original positions&#39;</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">_discrepant_positions_file_count</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">lineage</span><span class="o">.</span><span class="n">save_df_as_csv</span><span class="p">(</span><span class="n">discrepant_positions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span>
@@ -574,7 +575,8 @@
                    <span class="p">(</span><span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">common_snps</span><span class="p">[</span><span class="s1">&#39;genotype_added&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">])))]</span>
 
             <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">discrepant_genotypes</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">discrepant_genotypes_threshold</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;some genotypes were discrepant; marking those as null&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">discrepant_genotypes</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39; genotypes were discrepant; &#39;</span>
+                      <span class="s1">&#39;marking those as null&#39;</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">_discrepant_genotypes_file_count</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">lineage</span><span class="o">.</span><span class="n">save_df_as_csv</span><span class="p">(</span><span class="n">discrepant_genotypes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span>
