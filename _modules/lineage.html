@@ -319,11 +319,14 @@
         <span class="k">return</span> <span class="n">df</span></div>
 
 <div class="viewcode-block" id="Lineage.find_shared_dna"><a class="viewcode-back" href="../lineage.html#lineage.Lineage.find_shared_dna">[docs]</a>    <span class="k">def</span> <span class="nf">find_shared_dna</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual1</span><span class="p">,</span> <span class="n">individual2</span><span class="p">,</span> <span class="n">build</span><span class="o">=</span><span class="mi">37</span><span class="p">,</span> <span class="n">cM_threshold</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
-                        <span class="n">snp_threshold</span><span class="o">=</span><span class="mi">1100</span><span class="p">):</span>
+                        <span class="n">snp_threshold</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span> <span class="n">shared_genes</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Find the shared DNA between two individuals.</span>
 
 <span class="sd">        Computes the genetic distance in centimorgans (cMs) between SNPs using the specified</span>
 <span class="sd">        assembly&#39;s HapMap. Applies thresholds to determine the shared DNA. Plots shared DNA.</span>
+<span class="sd">        Optionally determines shared genes (i.e., genes that are transcribed from the shared DNA).</span>
+
+<span class="sd">        All output is saved to the output directory as `CSV` or `PNG` files.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -335,6 +338,8 @@
 <span class="sd">            minimum centimorgans for each shared DNA segment</span>
 <span class="sd">        snp_threshold : int</span>
 <span class="sd">            minimum SNPs for each shared DNA segment</span>
+<span class="sd">        shared_genes : bool</span>
+<span class="sd">            determine shared genes</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">individual1</span><span class="o">.</span><span class="n">snps</span>
@@ -388,16 +393,61 @@
                                           <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">),</span>
                              <span class="n">individual1</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; / &#39;</span> <span class="o">+</span> <span class="n">individual2</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; shared DNA&#39;</span><span class="p">,</span> <span class="n">build</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">shared_genes</span> <span class="ow">and</span> <span class="n">build</span> <span class="o">==</span> <span class="mi">36</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Remap SNPs to Build 37 to determine shared genes&#39;</span><span class="p">)</span>
+            <span class="n">shared_genes</span> <span class="o">=</span> <span class="kc">False</span>
+
         <span class="c1"># save results in CSV format</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">one_chrom_shared_dna</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_save_shared_dna_csv_format</span><span class="p">(</span><span class="n">one_chrom_shared_dna</span><span class="p">,</span> <span class="s1">&#39;one&#39;</span><span class="p">,</span>
                                              <span class="n">individual1</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">(),</span>
                                              <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">shared_genes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_compute_shared_genes</span><span class="p">(</span><span class="n">one_chrom_shared_dna</span><span class="p">,</span> <span class="s1">&#39;one&#39;</span><span class="p">,</span>
+                                           <span class="n">individual1</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">(),</span>
+                                           <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">())</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">two_chrom_shared_dna</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_save_shared_dna_csv_format</span><span class="p">(</span><span class="n">two_chrom_shared_dna</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span>
                                              <span class="n">individual1</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">(),</span>
-                                             <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">())</span></div>
+                                             <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">shared_genes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_compute_shared_genes</span><span class="p">(</span><span class="n">two_chrom_shared_dna</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span>
+                                           <span class="n">individual1</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">(),</span>
+                                           <span class="n">individual2</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">())</span></div>
+
+    <span class="k">def</span> <span class="nf">_compute_shared_genes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shared_dna</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">individual1_name</span><span class="p">,</span> <span class="n">individual2_name</span><span class="p">):</span>
+        <span class="n">knownGenes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">get_knownGene_h37</span><span class="p">()</span>
+        <span class="n">kgXref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">get_kgXref_h37</span><span class="p">()</span>
+
+        <span class="c1"># http://seqanswers.com/forums/showthread.php?t=22336</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">knownGenes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">kgXref</span><span class="p">)</span>
+
+        <span class="n">shared_genes</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">shared_segment</span> <span class="ow">in</span> <span class="n">shared_dna</span><span class="p">:</span>
+            <span class="c1"># determine genes transcribed from this shared DNA segment</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">shared_segment</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">])</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;txStart&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">shared_segment</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">])</span> <span class="o">&amp;</span>
+                          <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;txEnd&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">shared_segment</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">])]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="c1"># select subset of columns</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[[</span><span class="s1">&#39;geneSymbol&#39;</span><span class="p">,</span> <span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;strand&#39;</span><span class="p">,</span> <span class="s1">&#39;txStart&#39;</span><span class="p">,</span> <span class="s1">&#39;txEnd&#39;</span><span class="p">,</span> <span class="s1">&#39;refseq&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;proteinID&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">]]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">shared_genes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shared_genes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;one&#39;</span><span class="p">:</span>
+                <span class="n">chroms</span> <span class="o">=</span> <span class="s1">&#39;one_chrom&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">chroms</span> <span class="o">=</span> <span class="s1">&#39;two_chroms&#39;</span>
+
+            <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span> <span class="s1">&#39;shared_genes_&#39;</span> <span class="o">+</span> <span class="n">chroms</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span>
+                                <span class="n">individual1_name</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">individual2_name</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+
+            <span class="n">save_df_as_csv</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">shared_genes</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_save_shared_dna_csv_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shared_dna</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">individual1_name</span><span class="p">,</span> <span class="n">individual2_name</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;one&#39;</span><span class="p">:</span>

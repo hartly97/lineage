@@ -198,6 +198,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_hapmap_h37</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cytoband_h36</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cytoband_h37</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_knownGene_h37</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kgXref_h37</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Resources.get_hapmap_h36"><a class="viewcode-back" href="../../lineage.html#lineage.resources.Resources.get_hapmap_h36">[docs]</a>    <span class="k">def</span> <span class="nf">get_hapmap_h36</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hapmap_h36</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -222,6 +224,18 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_cytoband_h37</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_cytoband</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_path_cytoband_h37</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cytoband_h37</span></div>
+
+<div class="viewcode-block" id="Resources.get_knownGene_h37"><a class="viewcode-back" href="../../lineage.html#lineage.resources.Resources.get_knownGene_h37">[docs]</a>    <span class="k">def</span> <span class="nf">get_knownGene_h37</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_knownGene_h37</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_knownGene_h37</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_knownGene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_path_knownGene_h37</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_knownGene_h37</span></div>
+
+<div class="viewcode-block" id="Resources.get_kgXref_h37"><a class="viewcode-back" href="../../lineage.html#lineage.resources.Resources.get_kgXref_h37">[docs]</a>    <span class="k">def</span> <span class="nf">get_kgXref_h37</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kgXref_h37</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_kgXref_h37</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_kgXref</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_path_kgXref_h37</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kgXref_h37</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_load_hapmap</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
@@ -305,6 +319,64 @@
             <span class="c1"># adapted from chromosome plotting code (see [1]_)</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;gie_stain&#39;</span><span class="p">])</span>
             <span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_load_knownGene</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load UCSC knownGene table.</span>
+
+<span class="sd">        http://genome.ucsc.edu/cgi-bin/hgTables</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            path to knownGene file</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        df : pandas.DataFrame</span>
+<span class="sd">            knownGene data if loading was successful, else None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;strand&#39;</span><span class="p">,</span> <span class="s1">&#39;txStart&#39;</span><span class="p">,</span> <span class="s1">&#39;txEnd&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;cdsStart&#39;</span><span class="p">,</span> <span class="s1">&#39;cdsEnd&#39;</span><span class="p">,</span> <span class="s1">&#39;exonCount&#39;</span><span class="p">,</span> <span class="s1">&#39;exonStarts&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;exonEnds&#39;</span><span class="p">,</span> <span class="s1">&#39;proteinID&#39;</span><span class="p">,</span> <span class="s1">&#39;alignID&#39;</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_load_kgXref</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load UCSC kgXref table.</span>
+
+<span class="sd">        http://genome.ucsc.edu/cgi-bin/hgTables</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            path to kgXref file</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        df : pandas.DataFrame</span>
+<span class="sd">            kgXref data if loading was successful, else None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;kgID&#39;</span><span class="p">,</span> <span class="s1">&#39;mRNA&#39;</span><span class="p">,</span> <span class="s1">&#39;spID&#39;</span><span class="p">,</span> <span class="s1">&#39;spDisplayID&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;geneSymbol&#39;</span><span class="p">,</span> <span class="s1">&#39;refseq&#39;</span><span class="p">,</span> <span class="s1">&#39;protAcc&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;rfamAcc&#39;</span><span class="p">,</span> <span class="s1">&#39;tRnaName&#39;</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                               <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">df</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
@@ -407,6 +479,35 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span>
             <span class="s1">&#39;ftp://ftp.ncbi.nlm.nih.gov/hapmap/recombination/2011-01_phaseII_B37&#39;</span>
             <span class="s1">&#39;/genetic_map_HapMapII_GRCh37.tar.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;hapmap_h37.tar.gz&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_path_knownGene_h37</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get local path to knownGene file for hg19 / GRCh37 from UCSC, downloading if necessary.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            path to knownGene_h37.txt.gz</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span>
+            <span class="s1">&#39;ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/knownGene.txt.gz&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;knownGene_h37.txt.gz&#39;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_get_path_kgXref_h37</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get local path to kgXref file for hg19 / GRCh37 from UCSC, downloading if necessary.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            path to kgXref_h37.txt.gz</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span>
+            <span class="s1">&#39;ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/kgXref.txt.gz&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;kgXref_h37.txt.gz&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Download a file.</span>
