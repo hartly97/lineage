@@ -158,7 +158,35 @@
            <div itemprop="articleBody">
             
   <h1>Source code for lineage.resources</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot; Class for downloading and loading required external resources. &quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot; Class for downloading and loading required external resources.</span>
+
+<span class="sd">`lineage` uses tables and data from UCSC&#39;s Genome Browser:</span>
+
+<span class="sd">* http://genome.ucsc.edu/</span>
+<span class="sd">* http://genome.ucsc.edu/cgi-bin/hgTables</span>
+
+<span class="sd">References</span>
+<span class="sd">----------</span>
+<span class="sd">..[1] Karolchik D, Hinrichs AS, Furey TS, Roskin KM, Sugnet CW, Haussler D, Kent WJ.</span>
+<span class="sd">  The UCSC Table Browser data retrieval tool. Nucleic Acids Res. 2004 Jan</span>
+<span class="sd">  1;32(Database issue):D493-6. PubMed PMID: 14681465; PubMed Central PMCID:</span>
+<span class="sd">  PMC308837. https://www.ncbi.nlm.nih.gov/pubmed/14681465</span>
+<span class="sd">..[2] Tyner C, Barber GP, Casper J, Clawson H, Diekhans M, Eisenhart C, Fischer CM,</span>
+<span class="sd">  Gibson D, Gonzalez JN, Guruvadoo L, Haeussler M, Heitner S, Hinrichs AS,</span>
+<span class="sd">  Karolchik D, Lee BT, Lee CM, Nejad P, Raney BJ, Rosenbloom KR, Speir ML,</span>
+<span class="sd">  Villarreal C, Vivian J, Zweig AS, Haussler D, Kuhn RM, Kent WJ. The UCSC Genome</span>
+<span class="sd">  Browser database: 2017 update. Nucleic Acids Res. 2017 Jan 4;45(D1):D626-D634.</span>
+<span class="sd">  doi: 10.1093/nar/gkw1134. Epub 2016 Nov 29. PubMed PMID: 27899642; PubMed Central</span>
+<span class="sd">  PMCID: PMC5210591. https://www.ncbi.nlm.nih.gov/pubmed/27899642</span>
+<span class="sd">..[3] International Human Genome Sequencing Consortium. Initial sequencing and</span>
+<span class="sd">  analysis of the human genome. Nature. 2001 Feb 15;409(6822):860-921.</span>
+<span class="sd">  http://dx.doi.org/10.1038/35057062</span>
+<span class="sd">..[4] hg19 (GRCh37): Hiram Clawson, Brooke Rhead, Pauline Fujita, Ann Zweig, Katrina</span>
+<span class="sd">  Learned, Donna Karolchik and Robert Kuhn, https://genome.ucsc.edu/cgi-bin/hgGateway?db=hg19</span>
+<span class="sd">..[5] hg18 (NCBI36): Engineering effort led by Fan Hsu; QA effort led by Ann Zweig,</span>
+<span class="sd">  https://genome.ucsc.edu/cgi-bin/hgGateway?db=hg18</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Copyright (C) 2017 Andrew Riha</span>
@@ -294,8 +322,6 @@
     <span class="k">def</span> <span class="nf">_load_cytoband</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Load UCSC cytoBandIdeo table.</span>
 
-<span class="sd">        http://genome.ucsc.edu/cgi-bin/hgTables</span>
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        filename : str</span>
@@ -328,8 +354,6 @@
     <span class="k">def</span> <span class="nf">_load_knownGene</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Load UCSC knownGene table.</span>
 
-<span class="sd">        http://genome.ucsc.edu/cgi-bin/hgTables</span>
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        filename : str</span>
@@ -356,8 +380,6 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_load_kgXref</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Load UCSC kgXref table.</span>
-
-<span class="sd">        http://genome.ucsc.edu/cgi-bin/hgTables</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
