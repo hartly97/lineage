@@ -212,6 +212,7 @@
 <span class="kn">import</span> <span class="nn">tarfile</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">import</span> <span class="nn">zlib</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -265,6 +266,56 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_kgXref_h37</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_kgXref</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_path_kgXref_h37</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kgXref_h37</span></div>
+
+<div class="viewcode-block" id="Resources.download_example_datasets"><a class="viewcode-back" href="../../lineage.html#lineage.resources.Resources.download_example_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">download_example_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Download example datasets from `openSNP &lt;https://opensnp.org&gt;`_.</span>
+
+<span class="sd">        Per openSNP, &quot;the data is donated into the public domain using `CC0 1.0</span>
+<span class="sd">        &lt;http://creativecommons.org/publicdomain/zero/1.0/&gt;`_.&quot;</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ..[1] Greshake B, Bayer PE, Rausch H, Reda J (2014), &quot;openSNP–A Crowdsourced Web Resource</span>
+<span class="sd">          for Personal Genomics,&quot; PLOS ONE, 9(3): e89204,</span>
+<span class="sd">          https://doi.org/10.1371/journal.pone.0089204</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="s1">&#39;https://opensnp.org/data/662.23andme.304&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;662.23andme.304.csv.gz&#39;</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="s1">&#39;https://opensnp.org/data/662.23andme.340&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;662.23andme.340.csv.gz&#39;</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="s1">&#39;https://opensnp.org/data/662.ftdna-illumina.341&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;662.ftdna-illumina.341.csv.gz&#39;</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="s1">&#39;https://opensnp.org/data/663.23andme.305&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;663.23andme.305.csv.gz&#39;</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># these two files consist of concatenated gzip files and therefore need special handling</span>
+        <span class="n">gzip_paths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">gzip_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="s1">&#39;https://opensnp.org/data/4583.ftdna-illumina.3482&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;4583.ftdna-illumina.3482.csv.gz&#39;</span><span class="p">))</span>
+        <span class="n">gzip_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="s1">&#39;https://opensnp.org/data/4584.ftdna-illumina.3483&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;4584.ftdna-illumina.3483.csv.gz&#39;</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">gzip_path</span> <span class="ow">in</span> <span class="n">gzip_paths</span><span class="p">:</span>
+                <span class="c1"># https://stackoverflow.com/q/4928560</span>
+                <span class="c1"># https://stackoverflow.com/a/37042747</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">gzip_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">decompressor</span> <span class="o">=</span> <span class="n">zlib</span><span class="o">.</span><span class="n">decompressobj</span><span class="p">(</span><span class="mi">31</span><span class="p">)</span>
+
+                    <span class="c1"># decompress data from first concatenated gzip file</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">decompressor</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">decompressor</span><span class="o">.</span><span class="n">unused_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="c1"># decompress data from second concatenated gzip file, if any</span>
+                        <span class="n">additional_data</span> <span class="o">=</span> <span class="n">zlib</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">decompressor</span><span class="o">.</span><span class="n">unused_data</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+                        <span class="n">data</span> <span class="o">+=</span> <span class="n">additional_data</span><span class="p">[</span><span class="mi">33</span><span class="p">:]</span>  <span class="c1"># skip over second header</span>
+
+                <span class="c1"># recompress data</span>
+                <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">gzip_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_load_hapmap</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>

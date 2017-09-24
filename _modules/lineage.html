@@ -215,6 +215,21 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Individual</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensembl_rest_client</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="Lineage.download_example_datasets"><a class="viewcode-back" href="../lineage.html#lineage.Lineage.download_example_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">download_example_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Download example datasets from `openSNP &lt;https://opensnp.org&gt;`_.</span>
+
+<span class="sd">        Per openSNP, &quot;the data is donated into the public domain using `CC0 1.0</span>
+<span class="sd">        &lt;http://creativecommons.org/publicdomain/zero/1.0/&gt;`_.&quot;</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ..[1] Greshake B, Bayer PE, Rausch H, Reda J (2014), &quot;openSNP–A Crowdsourced Web Resource</span>
+<span class="sd">          for Personal Genomics,&quot; PLOS ONE, 9(3): e89204,</span>
+<span class="sd">          https://doi.org/10.1371/journal.pone.0089204</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">download_example_datasets</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Lineage.find_discordant_snps"><a class="viewcode-back" href="../lineage.html#lineage.Lineage.find_discordant_snps">[docs]</a>    <span class="k">def</span> <span class="nf">find_discordant_snps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual1</span><span class="p">,</span> <span class="n">individual2</span><span class="p">,</span> <span class="n">individual3</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Find discordant SNPs between two or three individuals.</span>
 
