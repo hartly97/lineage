@@ -207,6 +207,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">ftplib</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">tarfile</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
@@ -532,15 +533,19 @@
             <span class="s1">&#39;ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/kgXref.txt.gz&#39;</span><span class="p">,</span>
             <span class="s1">&#39;kgXref_h37.txt.gz&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Download a file.</span>
+    <span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Download a file to the resources folder.</span>
 
-<span class="sd">        Download data from `url` and save as `filename`.</span>
+<span class="sd">        Download data from `url`, save as `filename`, and optionally compress with gzip.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        url : str</span>
+<span class="sd">            URL to download data from</span>
 <span class="sd">        filename : str</span>
+<span class="sd">            name of file to save; if compress, ensure &#39;.gz&#39; is appended</span>
+<span class="sd">        compress : bool</span>
+<span class="sd">            compress with gzip</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -551,15 +556,24 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">lineage</span><span class="o">.</span><span class="n">dir_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resources_dir</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
 
+        <span class="k">if</span> <span class="n">compress</span> <span class="ow">and</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span> <span class="o">!=</span> <span class="s1">&#39;.gz&#39;</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">+=</span> <span class="s1">&#39;.gz&#39;</span>
+
         <span class="n">destination</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resources_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">destination</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_print_download_msg</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">compress</span><span class="p">:</span>
+                    <span class="n">open_func</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">open_func</span> <span class="o">=</span> <span class="nb">open</span>
+
                 <span class="c1"># get file if it hasn&#39;t already been downloaded [SO-01]</span>
-                <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">,</span> <span class="n">open_func</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>  <span class="c1"># a `bytes` object</span>
-                    <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span>
