@@ -293,7 +293,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\W|^(?=\d)&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># [SO-02]</span></div>
+        <span class="c1"># http://stackoverflow.com/a/3305731</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\W|^(?=\d)&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Individual.remap_snps"><a class="viewcode-back" href="../../lineage.html#lineage.individual.Individual.remap_snps">[docs]</a>    <span class="k">def</span> <span class="nf">remap_snps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_assembly</span><span class="p">,</span> <span class="n">target_assembly</span><span class="p">,</span> <span class="n">complement_bases</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Remap the SNP coordinates of this ``Individual`` from one assembly to another.</span>
@@ -538,7 +539,8 @@
             <span class="c1"># create genotype column from allele columns</span>
             <span class="n">df</span><span class="p">[</span><span class="s1">&#39;genotype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;allele1&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;allele2&#39;</span><span class="p">]</span>
 
-            <span class="c1"># delete allele columns [SO-01]</span>
+            <span class="c1"># delete allele columns</span>
+            <span class="c1"># http://stackoverflow.com/a/13485766</span>
             <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;allele1&#39;</span><span class="p">]</span>
             <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;allele2&#39;</span><span class="p">]</span>
 
@@ -673,8 +675,8 @@
             <span class="n">sorted_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;MT&#39;</span><span class="p">)</span>
             <span class="n">sorted_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;MT&#39;</span><span class="p">)</span>
 
-        <span class="c1"># https://stackoverflow.com/a/26707444</span>
         <span class="c1"># convert chrom column to category for sorting</span>
+        <span class="c1"># https://stackoverflow.com/a/26707444</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">_snps</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="n">sorted_list</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -689,28 +691,6 @@
     <span class="k">def</span> <span class="nf">_natural_sort_key</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">natural_sort_re</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;([0-9]+)&#39;</span><span class="p">)):</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">natural_sort_re</span><span class="p">,</span> <span class="n">s</span><span class="p">)]</span></div>
-
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Stack Overflow Attributions</span>
-<span class="sd">---------------------------</span>
-
-<span class="sd">[SO-##] references throughout the code above correspond to the following</span>
-<span class="sd">content from Stack Overflow (http://stackoverflow.com):</span>
-
-<span class="sd">[SO-01] &quot;Delete column from pandas DataFrame&quot;</span>
-<span class="sd">        http://stackoverflow.com/q/13411544</span>
-<span class="sd">        John : http://stackoverflow.com/users/390388/john</span>
-<span class="sd">        http://stackoverflow.com/a/13485766</span>
-<span class="sd">        Wes McKinney : http://stackoverflow.com/users/776560/wes-mckinney</span>
-
-<span class="sd">[SO-02] &quot;how do I convert a string to a valid variable name in python?&quot;</span>
-<span class="sd">        http://stackoverflow.com/q/3303312</span>
-<span class="sd">        George Profenza : http://stackoverflow.com/users/89766/george-profenza</span>
-<span class="sd">        http://stackoverflow.com/a/3305731</span>
-<span class="sd">        Nas Banov : http://stackoverflow.com/users/226086/nas-banov</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 
            </div>

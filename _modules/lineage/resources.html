@@ -621,7 +621,8 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">open_func</span> <span class="o">=</span> <span class="nb">open</span>
 
-                <span class="c1"># get file if it hasn&#39;t already been downloaded [SO-01]</span>
+                <span class="c1"># get file if it hasn&#39;t already been downloaded</span>
+                <span class="c1"># http://stackoverflow.com/a/7244263</span>
                 <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">,</span> <span class="n">open_func</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>  <span class="c1"># a `bytes` object</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -641,19 +642,6 @@
 <span class="sd">            path to file being downloaded</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Downloading &#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">path</span><span class="p">))</span></div>
-
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Stack Overflow Attributions</span>
-<span class="sd">---------------------------</span>
-
-<span class="sd">[SO-01] &quot;Download file from web in Python 3&quot;</span>
-<span class="sd">        http://stackoverflow.com/q/7243750</span>
-<span class="sd">        Bo Milanovich : http://stackoverflow.com/users/647897/bo-milanovich</span>
-<span class="sd">        http://stackoverflow.com/a/7244263</span>
-<span class="sd">        Oleh Prypin : http://stackoverflow.com/users/241039/oleh-prypin</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 
            </div>
