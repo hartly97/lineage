@@ -1,0 +1,622 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Output Files &mdash; lineage 1.0b1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="lineage 1.0b1 documentation" href="index.html"/>
+        <link rel="prev" title="lineage" href="readme.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> lineage
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0b1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">README</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Output Files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#load-snps">Load SNPs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#name-discrepant-positions-num-csv">&lt;name&gt;_discrepant_positions_&lt;num&gt;.csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#name-discrepant-genotypes-num-csv">&lt;name&gt;_discrepant_genotypes_&lt;num&gt;.csv</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#save-snps">Save SNPs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#name-csv">&lt;name&gt;.csv</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#find-discordant-snps">Find Discordant SNPs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#discordant-snps-name1-name2-csv">discordant_snps_&lt;name1&gt;_&lt;name2&gt;.csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#discordant-snps-name1-name2-name3-csv">discordant_snps_&lt;name1&gt;_&lt;name2&gt;_&lt;name3&gt;.csv</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#find-shared-dna">Find Shared DNA</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#shared-dna-name1-name2-png">shared_dna_&lt;name1&gt;_&lt;name2&gt;.png</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shared-dna-one-chrom-name1-name2-csv">shared_dna_one_chrom_&lt;name1&gt;_&lt;name2&gt;.csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shared-dna-two-chroms-name1-name2-csv">shared_dna_two_chroms_&lt;name1&gt;_&lt;name2&gt;.csv</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#find-shared-genes">Find Shared Genes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#shared-genes-one-chrom-name1-name2-csv">shared_genes_one_chrom_&lt;name1&gt;_&lt;name2&gt;.csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shared-genes-two-chroms-name1-name2-csv">shared_genes_two_chroms_&lt;name1&gt;_&lt;name2&gt;.csv</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lineage</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Output Files</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/output_files.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="output-files">
+<h1>Output Files<a class="headerlink" href="#output-files" title="Permalink to this headline">¶</a></h1>
+<p>The various output files produced by <code class="docutils literal"><span class="pre">lineage</span></code> are detailed below. Output files are saved in
+the output directory, which is defined at the instantiation of the <a class="reference internal" href="lineage.html#lineage.Lineage" title="lineage.Lineage"><code class="xref py py-class docutils literal"><span class="pre">Lineage</span></code></a>
+object.</p>
+<div class="section" id="load-snps">
+<h2>Load SNPs<a class="headerlink" href="#load-snps" title="Permalink to this headline">¶</a></h2>
+<p>Multiple raw data files can be loaded when an <a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a>
+is instantiated. Alternatively, additional files can be loaded after instantiation using
+<a class="reference internal" href="lineage.html#lineage.individual.Individual.load_snps" title="lineage.individual.Individual.load_snps"><code class="xref py py-meth docutils literal"><span class="pre">load_snps()</span></code></a>.</p>
+<p>When loading multiple raw data files, if there are any discrepancies between the existing data
+and the new data, those are noted. Specifically, discrepancies in SNP positions and genotypes
+are output as CSV files.</p>
+<div class="section" id="name-discrepant-positions-num-csv">
+<h3>&lt;name&gt;_discrepant_positions_&lt;num&gt;.csv<a class="headerlink" href="#name-discrepant-positions-num-csv" title="Permalink to this headline">¶</a></h3>
+<p>Where <code class="docutils literal"><span class="pre">name</span></code> is the name of the <a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a> and <code class="docutils literal"><span class="pre">num</span></code>
+indicates the file count for discrepant positions files.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Column</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>rsid</td>
+<td>SNP ID</td>
+</tr>
+<tr class="row-odd"><td>chrom</td>
+<td>Chromosome of existing SNP</td>
+</tr>
+<tr class="row-even"><td>pos</td>
+<td>Position of existing SNP</td>
+</tr>
+<tr class="row-odd"><td>genotype</td>
+<td>Genotype of existing SNP</td>
+</tr>
+<tr class="row-even"><td>chrom_added</td>
+<td>Chromosome of added SNP</td>
+</tr>
+<tr class="row-odd"><td>pos_added</td>
+<td>Position of added SNP (discrepant with pos)</td>
+</tr>
+<tr class="row-even"><td>genotype_added</td>
+<td>Genotype of added SNP</td>
+</tr>
+</tbody>
+</table>
+<p>A large number of discrepant positions could indicate that the files contain SNPs from different
+builds / assemblies.</p>
+</div>
+<div class="section" id="name-discrepant-genotypes-num-csv">
+<h3>&lt;name&gt;_discrepant_genotypes_&lt;num&gt;.csv<a class="headerlink" href="#name-discrepant-genotypes-num-csv" title="Permalink to this headline">¶</a></h3>
+<p>Where <code class="docutils literal"><span class="pre">name</span></code> is the name of the <a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a> and <code class="docutils literal"><span class="pre">num</span></code>
+indicates the file count for discrepant genotypes files.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Column</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>rsid</td>
+<td>SNP ID</td>
+</tr>
+<tr class="row-odd"><td>chrom</td>
+<td>Chromosome of existing SNP</td>
+</tr>
+<tr class="row-even"><td>pos</td>
+<td>Position of existing SNP</td>
+</tr>
+<tr class="row-odd"><td>genotype</td>
+<td>Genotype of existing SNP</td>
+</tr>
+<tr class="row-even"><td>chrom_added</td>
+<td>Chromosome of added SNP</td>
+</tr>
+<tr class="row-odd"><td>pos_added</td>
+<td>Position of added SNP</td>
+</tr>
+<tr class="row-even"><td>genotype_added</td>
+<td>Genotype of added SNP (discrepant with genotype)</td>
+</tr>
+</tbody>
+</table>
+<p>A large number of discrepant genotypes could indicate that the files contain SNPs for different
+individuals.</p>
+</div>
+</div>
+<div class="section" id="save-snps">
+<h2>Save SNPs<a class="headerlink" href="#save-snps" title="Permalink to this headline">¶</a></h2>
+<p>The SNPs for an <a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a> can be saved with
+<a class="reference internal" href="lineage.html#lineage.individual.Individual.save_snps" title="lineage.individual.Individual.save_snps"><code class="xref py py-meth docutils literal"><span class="pre">save_snps()</span></code></a>. One CSV file is output when SNPs are saved.</p>
+<div class="section" id="name-csv">
+<h3>&lt;name&gt;.csv<a class="headerlink" href="#name-csv" title="Permalink to this headline">¶</a></h3>
+<p>Where <code class="docutils literal"><span class="pre">name</span></code> is the name of the <a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="63%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Column</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>rsid</td>
+<td>SNP ID</td>
+</tr>
+<tr class="row-odd"><td>chromosome</td>
+<td>Chromosome of SNP</td>
+</tr>
+<tr class="row-even"><td>position</td>
+<td>Position of SNP</td>
+</tr>
+<tr class="row-odd"><td>genotype</td>
+<td>Genotype of SNP</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="find-discordant-snps">
+<h2>Find Discordant SNPs<a class="headerlink" href="#find-discordant-snps" title="Permalink to this headline">¶</a></h2>
+<p>Discordant SNPs between two or three individuals can be identified with
+<a class="reference internal" href="lineage.html#lineage.Lineage.find_discordant_snps" title="lineage.Lineage.find_discordant_snps"><code class="xref py py-meth docutils literal"><span class="pre">find_discordant_snps()</span></code></a>. One CSV file is optionally output when
+<cite>save_output=True</cite>.</p>
+<div class="section" id="discordant-snps-name1-name2-csv">
+<h3>discordant_snps_&lt;name1&gt;_&lt;name2&gt;.csv<a class="headerlink" href="#discordant-snps-name1-name2-csv" title="Permalink to this headline">¶</a></h3>
+<p>Where <code class="docutils literal"><span class="pre">name1</span></code> is the name of the first <a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a> and
+<code class="docutils literal"><span class="pre">name2</span></code> is the name of the second <a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Column</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>rsid</td>
+<td>SNP ID</td>
+</tr>
+<tr class="row-odd"><td>chrom</td>
+<td>Chromosome of SNP</td>
+</tr>
+<tr class="row-even"><td>pos</td>
+<td>Position of SNP</td>
+</tr>
+<tr class="row-odd"><td>genotype_&lt;name1&gt;</td>
+<td>Genotype of first individual</td>
+</tr>
+<tr class="row-even"><td>genotype_&lt;name2&gt;</td>
+<td>Genotype of second individual</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="discordant-snps-name1-name2-name3-csv">
+<h3>discordant_snps_&lt;name1&gt;_&lt;name2&gt;_&lt;name3&gt;.csv<a class="headerlink" href="#discordant-snps-name1-name2-name3-csv" title="Permalink to this headline">¶</a></h3>
+<p>Where <code class="docutils literal"><span class="pre">name1</span></code> is the name of the first <a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a>,
+<code class="docutils literal"><span class="pre">name2</span></code> is the name of the second <a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a>, and <code class="docutils literal"><span class="pre">name3</span></code> is
+the name of the third <a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Column</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>rsid</td>
+<td>SNP ID</td>
+</tr>
+<tr class="row-odd"><td>chrom</td>
+<td>Chromosome of SNP</td>
+</tr>
+<tr class="row-even"><td>pos</td>
+<td>Position of SNP</td>
+</tr>
+<tr class="row-odd"><td>genotype_&lt;name1&gt;</td>
+<td>Genotype of first individual</td>
+</tr>
+<tr class="row-even"><td>genotype_&lt;name2&gt;</td>
+<td>Genotype of second individual</td>
+</tr>
+<tr class="row-odd"><td>genotype_&lt;name3&gt;</td>
+<td>Genotype of third individual</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="find-shared-dna">
+<h2>Find Shared DNA<a class="headerlink" href="#find-shared-dna" title="Permalink to this headline">¶</a></h2>
+<p>Shared DNA between two individuals can be identified with
+<a class="reference internal" href="lineage.html#lineage.Lineage.find_shared_dna" title="lineage.Lineage.find_shared_dna"><code class="xref py py-meth docutils literal"><span class="pre">find_shared_dna()</span></code></a>. One PNG file is output, and up to two
+CSV files are output.</p>
+<p>In the filenames below, <code class="docutils literal"><span class="pre">name1</span></code> is the name of the first
+<a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a> and <code class="docutils literal"><span class="pre">name2</span></code> is the name of the second
+<a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a>.</p>
+<p>Note that shared DNA will not be shown on the Y chromosome since the Y chromosome does not
+recombine; therefore, the HapMaps do not have recombination rates for the Y chromosome.</p>
+<div class="section" id="shared-dna-name1-name2-png">
+<h3>shared_dna_&lt;name1&gt;_&lt;name2&gt;.png<a class="headerlink" href="#shared-dna-name1-name2-png" title="Permalink to this headline">¶</a></h3>
+<p>The plot that illustrates shared DNA (i.e., no shared DNA, shared DNA on one chromosome, and
+shared DNA on both chromosomes). The centromere for each chromosome is also detailed. Two examples
+of this plot are shown below.</p>
+<img alt="https://raw.githubusercontent.com/apriha/lineage/master/docs/images/shared_dna_User662_User663.png" src="https://raw.githubusercontent.com/apriha/lineage/master/docs/images/shared_dna_User662_User663.png" />
+<p>In the above plot, note that the two individuals only share DNA on one chromosome. In this plot,
+the larger regions where “No shared DNA” is indicated are due to SNPs not being available in
+those regions (i.e., SNPs were not tested in those regions).</p>
+<img alt="https://raw.githubusercontent.com/apriha/lineage/master/docs/images/shared_dna_User4583_User4584.png" src="https://raw.githubusercontent.com/apriha/lineage/master/docs/images/shared_dna_User4583_User4584.png" />
+<p>In the above plot, the areas where “No shared DNA” is indicated are the regions where SNPs were
+not tested or where DNA is not shared. The areas where “One chromosome shared” is indicated are
+regions where the individuals share DNA on one chromosome. The areas where “Two chromosomes
+shared” is indicated are regions where the individuals share DNA on both chromosomes in the pair
+(i.e., the individuals inherited the same DNA from their father and mother for those regions).
+Note that the regions where DNA is shared on both chromosomes is a subset of the regions where
+one chromosome is shared.</p>
+</div>
+<div class="section" id="shared-dna-one-chrom-name1-name2-csv">
+<h3>shared_dna_one_chrom_&lt;name1&gt;_&lt;name2&gt;.csv<a class="headerlink" href="#shared-dna-one-chrom-name1-name2-csv" title="Permalink to this headline">¶</a></h3>
+<p>If DNA is shared on one chromosome, a CSV file details the shared segments of DNA.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Column</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>chrom</td>
+<td>Chromosome with matching DNA segment</td>
+</tr>
+<tr class="row-odd"><td>start</td>
+<td>Start position of matching DNA segment</td>
+</tr>
+<tr class="row-even"><td>stop</td>
+<td>Stop position of matching DNA segment</td>
+</tr>
+<tr class="row-odd"><td>cMs</td>
+<td>Centimorgans of matching DNA segment</td>
+</tr>
+<tr class="row-even"><td>snps</td>
+<td>Number of SNPs in matching DNA segment</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="shared-dna-two-chroms-name1-name2-csv">
+<h3>shared_dna_two_chroms_&lt;name1&gt;_&lt;name2&gt;.csv<a class="headerlink" href="#shared-dna-two-chroms-name1-name2-csv" title="Permalink to this headline">¶</a></h3>
+<p>If DNA is shared on two chromosomes, a CSV file details the shared segments of DNA.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Column</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>chrom</td>
+<td>Pair of chromosomes with matching DNA segment</td>
+</tr>
+<tr class="row-odd"><td>start</td>
+<td>Start position of matching DNA segment on each chromosome</td>
+</tr>
+<tr class="row-even"><td>stop</td>
+<td>Stop position of matching DNA segment on each chromosome</td>
+</tr>
+<tr class="row-odd"><td>cMs</td>
+<td>Centimorgans of matching DNA segment on each chromosome</td>
+</tr>
+<tr class="row-even"><td>snps</td>
+<td>Number of SNPs in matching DNA segment on each chromosome</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="find-shared-genes">
+<h2>Find Shared Genes<a class="headerlink" href="#find-shared-genes" title="Permalink to this headline">¶</a></h2>
+<p>Shared genes (with the <em>same genetic variations</em>) between two individuals can be identified with
+<a class="reference internal" href="lineage.html#lineage.Lineage.find_shared_dna" title="lineage.Lineage.find_shared_dna"><code class="xref py py-meth docutils literal"><span class="pre">find_shared_dna()</span></code></a>, with the parameter <cite>shared_genes=True</cite>.
+In addition to the outputs produced by <a class="reference internal" href="#find-shared-dna">Find Shared DNA</a>, up to two additional CSV files are
+output that detail the shared genes.</p>
+<p>In the filenames below, <code class="docutils literal"><span class="pre">name1</span></code> is the name of the first
+<a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a> and <code class="docutils literal"><span class="pre">name2</span></code> is the name of the second
+<a class="reference internal" href="lineage.html#lineage.individual.Individual" title="lineage.individual.Individual"><code class="xref py py-class docutils literal"><span class="pre">Individual</span></code></a>.</p>
+<div class="section" id="shared-genes-one-chrom-name1-name2-csv">
+<h3>shared_genes_one_chrom_&lt;name1&gt;_&lt;name2&gt;.csv<a class="headerlink" href="#shared-genes-one-chrom-name1-name2-csv" title="Permalink to this headline">¶</a></h3>
+<p>If DNA is shared on one chromosome, this file details the genes shared between the two
+individuals on at least one chromosome; these genes are located in the shared DNA segments
+specified in <a class="reference internal" href="#shared-dna-one-chrom-name1-name2-csv">shared_dna_one_chrom_&lt;name1&gt;_&lt;name2&gt;.csv</a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Column*</th>
+<th class="head">Description*</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>Name of gene</td>
+</tr>
+<tr class="row-odd"><td>geneSymbol</td>
+<td>Gene symbol</td>
+</tr>
+<tr class="row-even"><td>chrom</td>
+<td>Reference sequence chromosome or scaffold</td>
+</tr>
+<tr class="row-odd"><td>strand</td>
+<td>+ or - for strand</td>
+</tr>
+<tr class="row-even"><td>txStart</td>
+<td>Transcription start position (or end position for minus strand item)</td>
+</tr>
+<tr class="row-odd"><td>txEnd</td>
+<td>Transcription end position (or start position for minus strand item)</td>
+</tr>
+<tr class="row-even"><td>refseq</td>
+<td>RefSeq ID</td>
+</tr>
+<tr class="row-odd"><td>proteinID</td>
+<td>UniProt display ID, UniProt accession, or RefSeq protein ID</td>
+</tr>
+<tr class="row-even"><td>description</td>
+<td>Description</td>
+</tr>
+</tbody>
+</table>
+<p>* <a class="reference external" href="http://genome.ucsc.edu">UCSC Genome Browser</a> /
+<a class="reference external" href="http://genome.ucsc.edu/cgi-bin/hgTables">UCSC Table Browser</a></p>
+</div>
+<div class="section" id="shared-genes-two-chroms-name1-name2-csv">
+<h3>shared_genes_two_chroms_&lt;name1&gt;_&lt;name2&gt;.csv<a class="headerlink" href="#shared-genes-two-chroms-name1-name2-csv" title="Permalink to this headline">¶</a></h3>
+<p>If DNA is shared on both chromosomes in a pair, this file details the genes shared between the two
+individuals on both chromosomes; these genes are located in the shared DNA segments specified in
+<a class="reference internal" href="#shared-dna-two-chroms-name1-name2-csv">shared_dna_two_chroms_&lt;name1&gt;_&lt;name2&gt;.csv</a>.</p>
+<p>The file has the same columns as <a class="reference internal" href="#shared-genes-one-chrom-name1-name2-csv">shared_genes_one_chrom_&lt;name1&gt;_&lt;name2&gt;.csv</a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="readme.html" class="btn btn-neutral" title="lineage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Andrew Riha.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0b1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

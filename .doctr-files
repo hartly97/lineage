@@ -7,6 +7,7 @@
 ./_sources/index.rst.txt
 ./_sources/lineage.rst.txt
 ./_sources/modules.rst.txt
+./_sources/output_files.rst.txt
 ./_sources/readme.rst.txt
 ./_static/ajax-loader.gif
 ./_static/basic.css
@@ -47,6 +48,7 @@
 ./lineage.html
 ./modules.html
 ./objects.inv
+./output_files.html
 ./py-modindex.html
 ./readme.html
 ./search.html
