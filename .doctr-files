@@ -1,5 +1,6 @@
 ./_modules/index.html
 ./_modules/lineage.html
+./_modules/lineage/ensembl.html
 ./_modules/lineage/individual.html
 ./_modules/lineage/resources.html
 ./_modules/lineage/visualization.html
