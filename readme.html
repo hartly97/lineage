@@ -96,6 +96,21 @@
 <li class="toctree-l2"><a class="reference internal" href="#capabilities">Capabilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#initialize-the-lineage-framework">Initialize the lineage Framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-example-data">Download Example Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-raw-data">Load Raw Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#remap-snps">Remap SNPs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#merge-raw-data-files">Merge Raw Data Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#save-snps">Save SNPs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compare-individuals">Compare Individuals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#find-discordant-snps">Find Discordant SNPs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#find-shared-dna">Find Shared DNA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#find-shared-genes">Find Shared Genes</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
@@ -195,6 +210,195 @@ genealogy.</p>
 <code class="docutils literal"><span class="pre">pip</span></code>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">lineage</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="initialize-the-lineage-framework">
+<h3>Initialize the lineage Framework<a class="headerlink" href="#initialize-the-lineage-framework" title="Permalink to this headline">¶</a></h3>
+<p>Import <code class="docutils literal"><span class="pre">Lineage</span></code> and instantiate a <code class="docutils literal"><span class="pre">Lineage</span></code> object:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lineage</span> <span class="k">import</span> <span class="n">Lineage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">Lineage</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="download-example-data">
+<h3>Download Example Data<a class="headerlink" href="#download-example-data" title="Permalink to this headline">¶</a></h3>
+<p>Let’s download some example data from <a class="reference external" href="https://opensnp.org">openSNP</a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">download_example_datasets</span><span class="p">()</span>
+<span class="go">Downloading resources/662.23andme.304.csv.gz</span>
+<span class="go">Downloading resources/662.23andme.340.csv.gz</span>
+<span class="go">Downloading resources/662.ftdna-illumina.341.csv.gz</span>
+<span class="go">Downloading resources/663.23andme.305.csv.gz</span>
+<span class="go">Downloading resources/4583.ftdna-illumina.3482.csv.gz</span>
+<span class="go">Downloading resources/4584.ftdna-illumina.3483.csv.gz</span>
+</pre></div>
+</div>
+<p>We’ll call these datasets <code class="docutils literal"><span class="pre">User662</span></code>, <code class="docutils literal"><span class="pre">User663</span></code>, <code class="docutils literal"><span class="pre">User4583</span></code>, and <code class="docutils literal"><span class="pre">User4584</span></code>.</p>
+</div>
+<div class="section" id="load-raw-data">
+<h3>Load Raw Data<a class="headerlink" href="#load-raw-data" title="Permalink to this headline">¶</a></h3>
+<p>Create an <code class="docutils literal"><span class="pre">Individual</span></code> in the context of the <code class="docutils literal"><span class="pre">lineage</span></code> framework to interact with the
+<code class="docutils literal"><span class="pre">User662</span></code> dataset:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user662</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">create_individual</span><span class="p">(</span><span class="s1">&#39;User662&#39;</span><span class="p">,</span> <span class="s1">&#39;resources/662.ftdna-illumina.341.csv.gz&#39;</span><span class="p">)</span>
+<span class="go">Loading resources/662.ftdna-illumina.341.csv.gz</span>
+</pre></div>
+</div>
+<p>Here we created <code class="docutils literal"><span class="pre">user662</span></code> with the name <code class="docutils literal"><span class="pre">User662</span></code> and loaded a raw data file.</p>
+</div>
+<div class="section" id="remap-snps">
+<h3>Remap SNPs<a class="headerlink" href="#remap-snps" title="Permalink to this headline">¶</a></h3>
+<p>Oops! The data we just loaded is Build 36, but we want Build 37 since the other files in the
+datasets are Build 37… Let’s remap the SNPs:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user662</span><span class="o">.</span><span class="n">remap_snps</span><span class="p">(</span><span class="s1">&#39;NCBI36&#39;</span><span class="p">,</span> <span class="s1">&#39;GRCh37&#39;</span><span class="p">)</span>
+<span class="go">Remapping chromosome 1...</span>
+<span class="go">Remapping chromosome 2...</span>
+<span class="go">Remapping chromosome 3...</span>
+<span class="go">Remapping chromosome 4...</span>
+<span class="go">Remapping chromosome 5...</span>
+<span class="go">Remapping chromosome 6...</span>
+<span class="go">Remapping chromosome 7...</span>
+<span class="go">Remapping chromosome 8...</span>
+<span class="go">Remapping chromosome 9...</span>
+<span class="go">Remapping chromosome 10...</span>
+<span class="go">Remapping chromosome 11...</span>
+<span class="go">Remapping chromosome 12...</span>
+<span class="go">Remapping chromosome 13...</span>
+<span class="go">Remapping chromosome 14...</span>
+<span class="go">Remapping chromosome 15...</span>
+<span class="go">Remapping chromosome 16...</span>
+<span class="go">Remapping chromosome 17...</span>
+<span class="go">Remapping chromosome 18...</span>
+<span class="go">Remapping chromosome 19...</span>
+<span class="go">Remapping chromosome 20...</span>
+<span class="go">Remapping chromosome 21...</span>
+<span class="go">Remapping chromosome 22...</span>
+</pre></div>
+</div>
+<p>SNPs can be re-mapped between Build 36 (<code class="docutils literal"><span class="pre">NCBI36</span></code>), Build 37 (<code class="docutils literal"><span class="pre">GRCh37</span></code>), and Build 38
+(<code class="docutils literal"><span class="pre">GRCh38</span></code>).</p>
+</div>
+<div class="section" id="merge-raw-data-files">
+<h3>Merge Raw Data Files<a class="headerlink" href="#merge-raw-data-files" title="Permalink to this headline">¶</a></h3>
+<p>The dataset for <code class="docutils literal"><span class="pre">User662</span></code> consists of three raw data files from two different DNA testing
+companies. Let’s load the remaining two files.</p>
+<p>As the data gets added, it’s compared to the existing data and discrepancies are saved to CSV
+files. (The discrepancy thresholds can be tuned via parameters.)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user662</span><span class="o">.</span><span class="n">load_snps</span><span class="p">([</span><span class="s1">&#39;resources/662.23andme.304.csv.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;resources/662.23andme.340.csv.gz&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                  <span class="n">discrepant_genotypes_threshold</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
+<span class="go">Loading resources/662.23andme.304.csv.gz</span>
+<span class="go">3 SNP positions being added differ; keeping original positions</span>
+<span class="go">Saving output/User662_discrepant_positions_1.csv</span>
+<span class="go">8 genotypes were discrepant; marking those as null</span>
+<span class="go">Saving output/User662_discrepant_genotypes_1.csv</span>
+<span class="go">Loading resources/662.23andme.340.csv.gz</span>
+<span class="go">27 SNP positions being added differ; keeping original positions</span>
+<span class="go">Saving output/User662_discrepant_positions_2.csv</span>
+<span class="go">156 genotypes were discrepant; marking those as null</span>
+<span class="go">Saving output/User662_discrepant_genotypes_2.csv</span>
+</pre></div>
+</div>
+<p>All <a class="reference external" href="https://apriha.github.io/lineage/output_files.html">output files</a> are saved to the output
+directory.</p>
+</div>
+<div class="section" id="save-snps">
+<h3>Save SNPs<a class="headerlink" href="#save-snps" title="Permalink to this headline">¶</a></h3>
+<p>Ok, so far we’ve remapped the SNPs to the same build and merged the SNPs from three files,
+identifying discrepancies along the way. Let’s save the merged dataset consisting of over 1M+
+SNPs to a CSV file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user662</span><span class="o">.</span><span class="n">save_snps</span><span class="p">()</span>
+<span class="go">Saving output/User662.csv</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="compare-individuals">
+<h3>Compare Individuals<a class="headerlink" href="#compare-individuals" title="Permalink to this headline">¶</a></h3>
+<p>Let’s create another <code class="docutils literal"><span class="pre">Individual</span></code> for the <code class="docutils literal"><span class="pre">User663</span></code> dataset:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user663</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">create_individual</span><span class="p">(</span><span class="s1">&#39;User663&#39;</span><span class="p">,</span> <span class="s1">&#39;resources/663.23andme.305.csv.gz&#39;</span><span class="p">)</span>
+<span class="go">Loading resources/663.23andme.305.csv.gz</span>
+</pre></div>
+</div>
+<p>Now we can perform some analysis between the <code class="docutils literal"><span class="pre">User662</span></code> and <code class="docutils literal"><span class="pre">User663</span></code> datasets.</p>
+<div class="section" id="find-discordant-snps">
+<h4>Find Discordant SNPs<a class="headerlink" href="#find-discordant-snps" title="Permalink to this headline">¶</a></h4>
+<p>First, let’s find discordant SNPs (i.e., SNP data that is not consistent with Mendelian
+inheritance):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">discordant_snps</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">find_discordant_snps</span><span class="p">(</span><span class="n">user662</span><span class="p">,</span> <span class="n">user663</span><span class="p">,</span> <span class="n">save_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">Saving output/discordant_snps_User662_User663.csv</span>
+</pre></div>
+</div>
+<p>This method also returns a <code class="docutils literal"><span class="pre">pandas</span></code> <code class="docutils literal"><span class="pre">DataFrame</span></code>, and it can be inspected interactively at
+the prompt, although the same output is available in the CSV file.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">discordant_snps</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">discordant_snps</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;MT&#39;</span><span class="p">])</span>
+<span class="go">37</span>
+</pre></div>
+</div>
+<p>Not counting mtDNA SNPs, there are 37 discordant SNPs between these two datasets.</p>
+</div>
+<div class="section" id="find-shared-dna">
+<h4>Find Shared DNA<a class="headerlink" href="#find-shared-dna" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">lineage</span></code> uses the probabilistic recombination rates throughout the human genome from the
+<a class="reference external" href="https://www.genome.gov/10001688/international-hapmap-project/">International HapMap Project</a> to
+compute the shared DNA (in centiMorgans) between two individuals. Additionally, <code class="docutils literal"><span class="pre">lineage</span></code>
+denotes when the shared DNA is shared on either one or both chromosomes in a pair. For example,
+when siblings share a segment of DNA on both chromosomes, they inherited the same DNA from their
+mother and father for that segment.</p>
+<p>With that background, let’s find the shared DNA between the <code class="docutils literal"><span class="pre">User662</span></code> and <code class="docutils literal"><span class="pre">User663</span></code> datasets,
+calculating the centiMorgans of shared DNA and plotting the results:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">find_shared_dna</span><span class="p">(</span><span class="n">user662</span><span class="p">,</span> <span class="n">user663</span><span class="p">,</span> <span class="n">cM_threshold</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">snp_threshold</span><span class="o">=</span><span class="mi">1100</span><span class="p">)</span>
+<span class="go">Downloading resources/hapmap_h37.tar.gz</span>
+<span class="go">Downloading resources/cytoband_h37.txt.gz</span>
+<span class="go">Saving output/shared_dna_User662_User663.png</span>
+<span class="go">Saving output/shared_dna_one_chrom_User662_User663.csv</span>
+</pre></div>
+</div>
+<p>Notice that the centiMorgan and SNP thresholds for each DNA segment can be tuned. Additionally,
+notice that two files were downloaded to facilitate the analysis and plotting - future analyses
+will used the downloaded files instead of downloading the files again.</p>
+<p>Here, the <a class="reference external" href="https://apriha.github.io/lineage/output_files.html">output</a> consists of a CSV file
+that details the shared segments of DNA on one chromosome. Additionally, a plot is also generated
+that illustrates the shared DNA:</p>
+<img alt="https://raw.githubusercontent.com/apriha/lineage/master/docs/images/shared_dna_User662_User663.png" src="https://raw.githubusercontent.com/apriha/lineage/master/docs/images/shared_dna_User662_User663.png" />
+</div>
+<div class="section" id="find-shared-genes">
+<h4>Find Shared Genes<a class="headerlink" href="#find-shared-genes" title="Permalink to this headline">¶</a></h4>
+<p>The <a class="reference external" href="https://www.nature.com/nature/focus/crick/pdf/crick227.pdf">Central Dogma of Molecular Biology</a>
+states that genetic information flows from DNA to mRNA to proteins: DNA is transcribed into
+mRNA, and mRNA is translated into a protein. It’s more complicated than this (it’s biology
+after all), but generally, one mRNA produces one protein, and the mRNA / protein is considered a
+gene.</p>
+<p>Therefore, it would be interesting to understand not just what DNA is shared between individuals,
+but what <em>genes</em> are shared between individuals <em>with the same variations</em>. (In other words,
+what genes are producing the <em>same</em> proteins?) Since <code class="docutils literal"><span class="pre">lineage</span></code> can determine the shared DNA
+between individuals, it can use that information to determine what genes are also shared on
+either one or both chromosomes.</p>
+<p>For this example, let’s create two more <code class="docutils literal"><span class="pre">Individuals</span></code> for the <code class="docutils literal"><span class="pre">User4583</span></code> and <code class="docutils literal"><span class="pre">User4584</span></code>
+datasets:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user4583</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">create_individual</span><span class="p">(</span><span class="s1">&#39;User4583&#39;</span><span class="p">,</span> <span class="s1">&#39;resources/4583.ftdna-illumina.3482.csv.gz&#39;</span><span class="p">)</span>
+<span class="go">Loading resources/4583.ftdna-illumina.3482.csv.gz</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user4584</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">create_individual</span><span class="p">(</span><span class="s1">&#39;User4584&#39;</span><span class="p">,</span> <span class="s1">&#39;resources/4584.ftdna-illumina.3483.csv.gz&#39;</span><span class="p">)</span>
+<span class="go">Loading resources/4584.ftdna-illumina.3483.csv.gz</span>
+</pre></div>
+</div>
+<p>Now let’s find the shared genes:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">find_shared_dna</span><span class="p">(</span><span class="n">user4583</span><span class="p">,</span> <span class="n">user4584</span><span class="p">,</span> <span class="n">shared_genes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">Saving output/shared_dna_User4583_User4584.png</span>
+<span class="go">Saving output/shared_dna_one_chrom_User4583_User4584.csv</span>
+<span class="go">Downloading resources/knownGene_h37.txt.gz</span>
+<span class="go">Downloading resources/kgXref_h37.txt.gz</span>
+<span class="go">Saving output/shared_genes_one_chrom_User4583_User4584.csv</span>
+<span class="go">Saving output/shared_dna_two_chroms_User4583_User4584.csv</span>
+<span class="go">Saving output/shared_genes_two_chroms_User4583_User4584.csv</span>
+</pre></div>
+</div>
+<p>The plot that illustrates the shared DNA is shown below. Note that in addition to outputting the
+shared DNA segments on either one or both chromosomes, the shared genes on either one or both
+chromosomes are also output. These <a class="reference external" href="https://apriha.github.io/lineage/output_files.html">output files</a>
+are detailed in the documentation.</p>
+<img alt="https://raw.githubusercontent.com/apriha/lineage/master/docs/images/shared_dna_User4583_User4584.png" src="https://raw.githubusercontent.com/apriha/lineage/master/docs/images/shared_dna_User4583_User4584.png" />
+</div>
 </div>
 </div>
 <div class="section" id="documentation">
