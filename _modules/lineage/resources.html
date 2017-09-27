@@ -499,7 +499,7 @@
 <span class="sd">          map of over 3.1 million SNPs.  Nature 449: 851-861.&quot;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">lineage</span><span class="o">.</span><span class="n">dir_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resources_dir</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">lineage</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resources_dir</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">hapmap</span> <span class="o">=</span> <span class="s1">&#39;hapmap_h36&#39;</span>
@@ -605,7 +605,7 @@
 <span class="sd">            path to downloaded file, None if error</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">lineage</span><span class="o">.</span><span class="n">dir_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resources_dir</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">lineage</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resources_dir</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">compress</span> <span class="ow">and</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span> <span class="o">!=</span> <span class="s1">&#39;.gz&#39;</span><span class="p">:</span>

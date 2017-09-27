@@ -402,7 +402,7 @@
             <span class="n">cytobands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">get_cytoband_h37</span><span class="p">()</span>
 
         <span class="c1"># plot data</span>
-        <span class="k">if</span> <span class="n">dir_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">create_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">):</span>
             <span class="n">plot_chromosomes</span><span class="p">(</span><span class="n">one_chrom_shared_dna</span><span class="p">,</span> <span class="n">two_chrom_shared_dna</span><span class="p">,</span> <span class="n">cytobands</span><span class="p">,</span>
                              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span> <span class="s1">&#39;shared_dna_&#39;</span> <span class="o">+</span>
                                           <span class="n">individual1</span><span class="o">.</span><span class="n">get_var_name</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span>
@@ -639,7 +639,19 @@
                 <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">shared_dna</span></div>
 
-<div class="viewcode-block" id="dir_exists"><a class="viewcode-back" href="../lineage.html#lineage.dir_exists">[docs]</a><span class="k">def</span> <span class="nf">dir_exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="create_dir"><a class="viewcode-back" href="../lineage.html#lineage.create_dir">[docs]</a><span class="k">def</span> <span class="nf">create_dir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create directory specified by `path` if it doesn&#39;t already exist.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        path to directory</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if `path` exists</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># https://stackoverflow.com/a/5032238</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -654,7 +666,7 @@
 
 
 <div class="viewcode-block" id="save_df_as_csv"><a class="viewcode-back" href="../lineage.html#lineage.save_df_as_csv">[docs]</a><span class="k">def</span> <span class="nf">save_df_as_csv</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">dir_exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">create_dir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
         <span class="n">destination</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving &#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">destination</span><span class="p">))</span>
         <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="n">na_rep</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span></div>
