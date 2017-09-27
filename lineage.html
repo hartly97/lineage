@@ -192,7 +192,7 @@
 <em class="property">class </em><code class="descclassname">lineage.individual.</code><code class="descname">Individual</code><span class="sig-paren">(</span><em>name</em>, <em>raw_data=None</em>, <em>output_dir=''</em>, <em>ensembl_rest_client=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/individual.html#Individual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.individual.Individual" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Object used to represent and interact with an individual.</p>
-<p>The <cite>Individual</cite> object maintains information about an individual. The object provides
+<p>The <code class="docutils literal"><span class="pre">Individual</span></code> object maintains information about an individual. The object provides
 methods for loading an individual’s genetic data (SNPs) and normalizing it for use with the
 <cite>lineage</cite> framework.</p>
 <dl class="method">
@@ -236,7 +236,18 @@ a large value could indicated mismatched individuals</li>
 <dl class="attribute">
 <dt id="lineage.individual.Individual.name">
 <code class="descname">name</code><a class="headerlink" href="#lineage.individual.Individual.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get this <code class="docutils literal"><span class="pre">Individual</span></code>’s name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lineage.individual.Individual.remap_snps">
@@ -282,7 +293,18 @@ remapping.</p>
 <dl class="attribute">
 <dt id="lineage.individual.Individual.snps">
 <code class="descname">snps</code><a class="headerlink" href="#lineage.individual.Individual.snps" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get a copy of this <code class="docutils literal"><span class="pre">Individual</span></code>’s SNPs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">pandas.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -337,32 +359,98 @@ PMCID: PMC5210591. <a class="reference external" href="https://www.ncbi.nlm.nih.
 <dl class="method">
 <dt id="lineage.resources.Resources.get_cytoband_h36">
 <code class="descname">get_cytoband_h36</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources.get_cytoband_h36"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources.get_cytoband_h36" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get UCSC cytoBand table for Build 36.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">cytoBand table if loading was successful, else None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">pandas.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lineage.resources.Resources.get_cytoband_h37">
 <code class="descname">get_cytoband_h37</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources.get_cytoband_h37"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources.get_cytoband_h37" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get UCSC cytoBand table for Build 37.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">cytoBand table if loading was successful, else None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">pandas.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lineage.resources.Resources.get_hapmap_h36">
 <code class="descname">get_hapmap_h36</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources.get_hapmap_h36"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources.get_hapmap_h36" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get International HapMap Consortium HapMap for Build 36.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict of pandas.DataFrame HapMap tables if loading was successful, else None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lineage.resources.Resources.get_hapmap_h37">
 <code class="descname">get_hapmap_h37</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources.get_hapmap_h37"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources.get_hapmap_h37" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get International HapMap Consortium HapMap for Build 37.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict of pandas.DataFrame HapMap tables if loading was successful, else None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lineage.resources.Resources.get_kgXref_h37">
 <code class="descname">get_kgXref_h37</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources.get_kgXref_h37"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources.get_kgXref_h37" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get UCSC kgXref table for Build 37.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">kgXref table if loading was successful, else None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">pandas.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lineage.resources.Resources.get_knownGene_h37">
 <code class="descname">get_knownGene_h37</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage/resources.html#Resources.get_knownGene_h37"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.resources.Resources.get_knownGene_h37" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get UCSC knownGene table for Build 37.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">knownGene table if loading was successful, else None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">pandas.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -409,6 +497,7 @@ PMCID: PMC5210591. <a class="reference external" href="https://www.ncbi.nlm.nih.
 <dt id="lineage.Lineage">
 <em class="property">class </em><code class="descclassname">lineage.</code><code class="descname">Lineage</code><span class="sig-paren">(</span><em>output_dir='output'</em>, <em>resources_dir='resources'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#Lineage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.Lineage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Object used to interact with the <cite>lineage</cite> framework.</p>
 <dl class="method">
 <dt id="lineage.Lineage.create_individual">
 <code class="descname">create_individual</code><span class="sig-paren">(</span><em>name</em>, <em>raw_data=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#Lineage.create_individual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.Lineage.create_individual" title="Permalink to this definition">¶</a></dt>
@@ -485,7 +574,7 @@ PMCID: PMC5210591. <a class="reference external" href="https://www.ncbi.nlm.nih.
 <dt id="lineage.Lineage.find_shared_dna">
 <code class="descname">find_shared_dna</code><span class="sig-paren">(</span><em>individual1</em>, <em>individual2</em>, <em>build=37</em>, <em>cM_threshold=0.75</em>, <em>snp_threshold=1100</em>, <em>shared_genes=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#Lineage.find_shared_dna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.Lineage.find_shared_dna" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the shared DNA between two individuals.</p>
-<p>Computes the genetic distance in centimorgans (cMs) between SNPs using the specified
+<p>Computes the genetic distance in centiMorgans (cMs) between SNPs using the specified
 assembly’s HapMap. Applies thresholds to determine the shared DNA. Plots shared DNA.
 Optionally determines shared genes (i.e., genes that are transcribed from the shared DNA).</p>
 <p>All output is saved to the output directory as <cite>CSV</cite> or <cite>PNG</cite> files.</p>
@@ -497,7 +586,7 @@ Optionally determines shared genes (i.e., genes that are transcribed from the sh
 <li><strong>individual1</strong> (<em>Individual</em>)</li>
 <li><strong>individual2</strong> (<em>Individual</em>)</li>
 <li><strong>build</strong> (<em>{36, 37}</em>) – human genome assembly</li>
-<li><strong>cM_threshold</strong> (<em>float</em>) – minimum centimorgans for each shared DNA segment</li>
+<li><strong>cM_threshold</strong> (<em>float</em>) – minimum centiMorgans for each shared DNA segment</li>
 <li><strong>snp_threshold</strong> (<em>int</em>) – minimum SNPs for each shared DNA segment</li>
 <li><strong>shared_genes</strong> (<em>bool</em>) – determine shared genes</li>
 </ul>
@@ -530,7 +619,21 @@ Optionally determines shared genes (i.e., genes that are transcribed from the sh
 <dl class="function">
 <dt id="lineage.save_df_as_csv">
 <code class="descclassname">lineage.</code><code class="descname">save_df_as_csv</code><span class="sig-paren">(</span><em>df</em>, <em>path</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lineage.html#save_df_as_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lineage.save_df_as_csv" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Save dataframe to a CSV file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>df</strong> (<em>pandas.DataFrame</em>) – dataframe to save</li>
+<li><strong>path</strong> (<em>str</em>) – path to directory where to save CSV file</li>
+<li><strong>filename</strong> (<em>str</em>) – filename of CSV file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 </div>

@@ -193,7 +193,19 @@
 
 
 <div class="viewcode-block" id="Lineage"><a class="viewcode-back" href="../lineage.html#lineage.Lineage">[docs]</a><span class="k">class</span> <span class="nc">Lineage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Object used to interact with the `lineage` framework. &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="n">resources_dir</span><span class="o">=</span><span class="s1">&#39;resources&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initialize a ``Lineage`` object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        output_dir : str</span>
+<span class="sd">            name / path of output directory</span>
+<span class="sd">        resources_dir</span>
+<span class="sd">            name / path of resources directory</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="n">Resources</span><span class="p">(</span><span class="n">resources_dir</span><span class="o">=</span><span class="n">resources_dir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ensembl_rest_client</span> <span class="o">=</span> <span class="n">EnsemblRestClient</span><span class="p">()</span>
@@ -338,7 +350,7 @@
                         <span class="n">snp_threshold</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span> <span class="n">shared_genes</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Find the shared DNA between two individuals.</span>
 
-<span class="sd">        Computes the genetic distance in centimorgans (cMs) between SNPs using the specified</span>
+<span class="sd">        Computes the genetic distance in centiMorgans (cMs) between SNPs using the specified</span>
 <span class="sd">        assembly&#39;s HapMap. Applies thresholds to determine the shared DNA. Plots shared DNA.</span>
 <span class="sd">        Optionally determines shared genes (i.e., genes that are transcribed from the shared DNA).</span>
 
@@ -351,7 +363,7 @@
 <span class="sd">        build : {36, 37}</span>
 <span class="sd">            human genome assembly</span>
 <span class="sd">        cM_threshold : float</span>
-<span class="sd">            minimum centimorgans for each shared DNA segment</span>
+<span class="sd">            minimum centiMorgans for each shared DNA segment</span>
 <span class="sd">        snp_threshold : int</span>
 <span class="sd">            minimum SNPs for each shared DNA segment</span>
 <span class="sd">        shared_genes : bool</span>
@@ -527,7 +539,7 @@
             <span class="c1"># get difference between positions</span>
             <span class="n">pos_diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ediff1d</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">])</span>
 
-            <span class="c1"># compute cMs between each pos based on probablistic recombination rate</span>
+            <span class="c1"># compute cMs between each pos based on probabilistic recombination rate</span>
             <span class="c1"># https://www.biostars.org/p/123539/</span>
             <span class="n">cMs_match_segment</span> <span class="o">=</span> <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">pos_diffs</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 
@@ -615,7 +627,7 @@
             <span class="n">snp_counts</span> <span class="o">=</span> <span class="n">matches_passed</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">matches_passed</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 
             <span class="c1"># apply SNP count threshold for each matching segment; we now have the shared DNA</span>
-            <span class="c1"># segments that pass the centimorgan and SNP thresholds</span>
+            <span class="c1"># segments that pass the centiMorgan and SNP thresholds</span>
             <span class="n">matches_passed</span> <span class="o">=</span> <span class="n">matches_passed</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">snp_counts</span> <span class="o">&gt;</span> <span class="n">snp_threshold</span><span class="p">)]</span>
 
             <span class="c1"># compute total cMs for each match segment</span>
@@ -666,6 +678,18 @@
 
 
 <div class="viewcode-block" id="save_df_as_csv"><a class="viewcode-back" href="../lineage.html#lineage.save_df_as_csv">[docs]</a><span class="k">def</span> <span class="nf">save_df_as_csv</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Save dataframe to a CSV file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    df : pandas.DataFrame</span>
+<span class="sd">        dataframe to save</span>
+<span class="sd">    path : str</span>
+<span class="sd">        path to directory where to save CSV file</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        filename of CSV file</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">create_dir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
         <span class="n">destination</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving &#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">destination</span><span class="p">))</span>

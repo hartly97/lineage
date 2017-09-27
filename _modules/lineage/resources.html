@@ -224,6 +224,14 @@
     <span class="sd">&quot;&quot;&quot; Object used to manage resources required by `lineage`. &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resources_dir</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initialize a ``Resources`` object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        resources_dir : str</span>
+<span class="sd">            name / path of resources directory</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_resources_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">resources_dir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_hapmap_h36</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_hapmap_h37</span> <span class="o">=</span> <span class="kc">None</span>
@@ -233,36 +241,84 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_kgXref_h37</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Resources.get_hapmap_h36"><a class="viewcode-back" href="../../lineage.html#lineage.resources.Resources.get_hapmap_h36">[docs]</a>    <span class="k">def</span> <span class="nf">get_hapmap_h36</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get International HapMap Consortium HapMap for Build 36.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            dict of pandas.DataFrame HapMap tables if loading was successful, else None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hapmap_h36</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_hapmap_h36</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_hapmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_path_hapmap_h36</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hapmap_h36</span></div>
 
 <div class="viewcode-block" id="Resources.get_hapmap_h37"><a class="viewcode-back" href="../../lineage.html#lineage.resources.Resources.get_hapmap_h37">[docs]</a>    <span class="k">def</span> <span class="nf">get_hapmap_h37</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get International HapMap Consortium HapMap for Build 37.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            dict of pandas.DataFrame HapMap tables if loading was successful, else None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hapmap_h37</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_hapmap_h37</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_hapmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_path_hapmap_h37</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hapmap_h37</span></div>
 
 <div class="viewcode-block" id="Resources.get_cytoband_h36"><a class="viewcode-back" href="../../lineage.html#lineage.resources.Resources.get_cytoband_h36">[docs]</a>    <span class="k">def</span> <span class="nf">get_cytoband_h36</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get UCSC cytoBand table for Build 36.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            cytoBand table if loading was successful, else None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cytoband_h36</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cytoband_h36</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_cytoband</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_path_cytoband_h36</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cytoband_h36</span></div>
 
 <div class="viewcode-block" id="Resources.get_cytoband_h37"><a class="viewcode-back" href="../../lineage.html#lineage.resources.Resources.get_cytoband_h37">[docs]</a>    <span class="k">def</span> <span class="nf">get_cytoband_h37</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get UCSC cytoBand table for Build 37.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            cytoBand table if loading was successful, else None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cytoband_h37</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cytoband_h37</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_cytoband</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_path_cytoband_h37</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cytoband_h37</span></div>
 
 <div class="viewcode-block" id="Resources.get_knownGene_h37"><a class="viewcode-back" href="../../lineage.html#lineage.resources.Resources.get_knownGene_h37">[docs]</a>    <span class="k">def</span> <span class="nf">get_knownGene_h37</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get UCSC knownGene table for Build 37.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            knownGene table if loading was successful, else None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_knownGene_h37</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_knownGene_h37</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_knownGene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_path_knownGene_h37</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_knownGene_h37</span></div>
 
 <div class="viewcode-block" id="Resources.get_kgXref_h37"><a class="viewcode-back" href="../../lineage.html#lineage.resources.Resources.get_kgXref_h37">[docs]</a>    <span class="k">def</span> <span class="nf">get_kgXref_h37</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get UCSC kgXref table for Build 37.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            kgXref table if loading was successful, else None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kgXref_h37</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_kgXref_h37</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_kgXref</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_path_kgXref_h37</span><span class="p">())</span>
 
@@ -378,12 +434,12 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        filename : str</span>
-<span class="sd">            path to cytoband file</span>
+<span class="sd">            path to cytoBand file</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        df : pandas.DataFrame</span>
-<span class="sd">            cytoband data if loading was successful, else None</span>
+<span class="sd">            cytoBand table if loading was successful, else None</span>
 
 <span class="sd">        References</span>
 <span class="sd">        ----------</span>
@@ -415,7 +471,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        df : pandas.DataFrame</span>
-<span class="sd">            knownGene data if loading was successful, else None</span>
+<span class="sd">            knownGene table if loading was successful, else None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -442,7 +498,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        df : pandas.DataFrame</span>
-<span class="sd">            kgXref data if loading was successful, else None</span>
+<span class="sd">            kgXref table if loading was successful, else None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
