@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>lineage &mdash; lineage 1.0b1 documentation</title>
+  <title>lineage &mdash; lineage 0+unknown documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="lineage 1.0b1 documentation" href="../index.html"/>
+    <link rel="top" title="lineage 0+unknown documentation" href="../index.html"/>
         <link rel="up" title="Module code" href="index.html"/> 
 
   
@@ -63,10 +63,6 @@
 
           
             
-            
-              <div class="version">
-                1.0b1
-              </div>
             
           
 
@@ -190,6 +186,11 @@
 <span class="kn">from</span> <span class="nn">lineage.individual</span> <span class="k">import</span> <span class="n">Individual</span>
 <span class="kn">from</span> <span class="nn">lineage.resources</span> <span class="k">import</span> <span class="n">Resources</span>
 <span class="kn">from</span> <span class="nn">lineage.visualization</span> <span class="k">import</span> <span class="n">plot_chromosomes</span>
+
+<span class="c1"># set version string with Versioneer</span>
+<span class="kn">from</span> <span class="nn">lineage._version</span> <span class="k">import</span> <span class="n">get_versions</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">get_versions</span><span class="p">()[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span>
+<span class="k">del</span> <span class="n">get_versions</span>
 
 
 <div class="viewcode-block" id="Lineage"><a class="viewcode-back" href="../lineage.html#lineage.Lineage">[docs]</a><span class="k">class</span> <span class="nc">Lineage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -730,7 +731,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0b1',
+            VERSION:'0+unknown',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
